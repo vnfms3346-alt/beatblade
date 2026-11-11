@@ -2875,7 +2875,7 @@ function showNotes(){let d=document.getElementById('notesDlg');if(!d){d=document
     d.innerHTML=`<div class="nbody">${NOTES_HTML}</div><div class="nbtns"><button type="button" class="btn" id="notesOk">확인</button></div>`;document.body.appendChild(d);
     const close=()=>{try{localStorage.setItem('bb_notes_seen',NOTES_VER)}catch(e){}d.close()};d.querySelector('#notesOk').onclick=close;d.addEventListener('cancel',()=>{try{localStorage.setItem('bb_notes_seen',NOTES_VER)}catch(e){}});d.addEventListener('click',e=>{if(e.target===d)close()})}
   if(!d.open){if(d.showModal)d.showModal();else d.setAttribute('open','')}d.querySelector('#notesOk').focus()}
-(function(){const st=document.getElementById('settings');if(st&&!document.getElementById('notesBtn')){const b=document.createElement('button');b.type='button';b.id='notesBtn';b.className='notesbtn';b.textContent='업데이트 소식 · v1.8.3.1';b.onclick=showNotes;st.insertAdjacentElement('afterend',b)}
+(function(){const st=document.getElementById('settings');if(st&&!document.getElementById('notesBtn')){const b=document.createElement('button');b.type='button';b.id='notesBtn';b.className='notesbtn';b.textContent='업데이트 소식 · v1.8.3.2';b.onclick=showNotes;st.insertAdjacentElement('afterend',b)}
   let seen='';try{seen=localStorage.getItem('bb_notes_seen')||''}catch(e){}if(seen!==NOTES_VER)SPLASH_DONE.then(()=>setTimeout(showNotes,300))})();
 document.querySelectorAll('.pick').forEach(b=>b.onclick=()=>newGame(b.dataset.hero));refreshLocks();
 function showOnly(id){['titleOv','lvOv','pauseOv','endOv'].forEach(k=>$(k).hidden=k!==id);$('spBtn').hidden=id!==null;$('pzBtn').hidden=id!==null}
@@ -3522,9 +3522,13 @@ const AU={
   async signUp(n,pin){n=AU.normNick(n);const j=await AU.idp('signUp',{email:await AU.mail(n),password:AU.pw(pin),returnSecureToken:true});AU.keep(j,n);
     const g=AU.guest();AU.prof={n,coins:Math.max(0,g.coins|0),created:{'.sv':'timestamp'}};await AU.db('/users/'+AU.s.uid+'.json',{method:'PUT',body:JSON.stringify(AU.prof)});AU.prof.created=Date.now();if(g.coins){g.coins=0;AU.saveGuest(g)}return AU.prof},
   async signIn(n,pin){n=AU.normNick(n);const j=await AU.idp('signInWithPassword',{email:await AU.mail(n),password:AU.pw(pin),returnSecureToken:true});AU.keep(j,n);await AU.pull();return AU.prof},
-  async pull(){if(!AU.on)return null;try{const p=await AU.db('/users/'+AU.s.uid+'.json');AU.prof=p||{n:AU.s.n,coins:0};if(AU.prof.n)AU.s.n=AU.prof.n;AU.save()}catch(e){if(String(e.message)==='SESSION')return null;AU.prof=AU.prof||{n:AU.s.n,coins:0}}return AU.prof},
+  async pull(){if(!AU.on)return null;try{const p=await AU.db('/users/'+AU.s.uid+'.json');AU.prof=p||{n:AU.s.n,coins:0};if(AU.prof.n)AU.s.n=AU.prof.n;AU.save();AU.admFill()}catch(e){if(String(e.message)==='SESSION')return null;AU.prof=AU.prof||{n:AU.s.n,coins:0}}return AU.prof},
   // 나중에 상점·화폐용: 계정이면 서버, 게스트면 기기에 저장
   async addCoins(d){d=Math.floor(d)||0;if(!d)return;if(AU.on){const p=AU.prof||await AU.pull()||{coins:0};p.coins=Math.max(0,(p.coins|0)+d);await AU.db('/users/'+AU.s.uid+'/coins.json',{method:'PUT',body:String(p.coins)}).catch(()=>{})}else{const g=AU.guest();g.coins=Math.max(0,(g.coins|0)+d);AU.saveGuest(g)}acctBar()},
+  // 운영자 계정 1회 코인 1000 채우기 (기기·서버 둘 다 표시해 두고 한 번만)
+  admFill(){try{if(!AU.on||!BD_ADMIN.includes(AU.s.uid))return;let sh=AU.prof.shop;if(!sh){try{SH.load();sh=JSON.parse(JSON.stringify(SH.data))}catch(e){sh={}}}let lf=0;try{lf=localStorage.getItem('bb_admfill1_'+AU.s.uid)}catch(e){}if(sh.fill1||lf)return;
+    AU.prof.coins=Math.max(1000,AU.prof.coins|0);sh.fill1=1;sh.up=sh.up||{};sh.own=sh.own||{};AU.prof.shop=sh;try{localStorage.setItem('bb_admfill1_'+AU.s.uid,'1')}catch(e){}
+    AU.db('/users/'+AU.s.uid+'/coins.json',{method:'PUT',body:String(AU.prof.coins)}).catch(()=>{});AU.db('/users/'+AU.s.uid+'/shop.json',{method:'PUT',body:JSON.stringify(sh)}).catch(()=>{});if(typeof acctBar==='function')setTimeout(acctBar,0)}catch(e){}},
   coins(){return AU.on?((AU.prof&&AU.prof.coins)|0):(AU.guest().coins|0)},
   name(){return AU.on?AU.s.n:AU.guest().n},
   out(silent){AU.s=null;AU.prof=null;AU.save();acctBar();if(!silent&&window.rkReset)rkReset()},
