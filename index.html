@@ -576,9 +576,9 @@ const ROSTER={
   violetR:{name:'설구리',v:'설순이 너구리',disp:'설순이',a1:'raccoon_charge',a2:'raccoon_belly_slam'},
   lion:{name:'레오나',a1:'sword_slash',a2:'lion_charge'},
   devil:{name:'이드',v:'표준',a1:'mic_swing',a2:'tail_whip'},
-  angel:{name:'이드',v:'천사악마',a1:'wing_buffet',a2:'halo_smash'},
   idaxe:{name:'이드',v:'도끼',a1:'axe_swing',a2:'jealous_axe_slam'},
   idtrip:{name:'이드',v:'여행원피스',a1:'breeze',a2:'wave'},
+  angel:{name:'이드',v:'천사악마',a1:'wing_buffet',a2:'halo_smash'},
   nobu:{name:'노브냥이',v:'서큐버스',a1:'tail_whip',a2:'wing_strike'},
   nobu2:{name:'노브냥이',v:'서큐버스 2',kit:'nobu',a1:'tail_lash',a2:'charm_dive'},
   nobu3:{name:'노브냥이',v:'서큐버스 3',kit:'nobu',a1:'tail_lash',a2:'charm_dive'},
@@ -2907,7 +2907,7 @@ function showNotes(){let d=document.getElementById('notesDlg');if(!d){d=document
     d.innerHTML=`<div class="nbody">${NOTES_HTML}</div><div class="nbtns"><button type="button" class="btn" id="notesOk">확인</button></div>`;document.body.appendChild(d);
     const close=()=>{try{localStorage.setItem('bb_notes_seen',NOTES_VER)}catch(e){}d.close()};d.querySelector('#notesOk').onclick=close;d.addEventListener('cancel',()=>{try{localStorage.setItem('bb_notes_seen',NOTES_VER)}catch(e){}});d.addEventListener('click',e=>{if(e.target===d)close()})}
   if(!d.open){if(d.showModal)d.showModal();else d.setAttribute('open','')}d.querySelector('#notesOk').focus()}
-(function(){const st=document.getElementById('settings');if(st&&!document.getElementById('notesBtn')){const b=document.createElement('button');b.type='button';b.id='notesBtn';b.className='notesbtn';b.textContent='업데이트 소식 · v1.8.5.2';b.onclick=showNotes;st.insertAdjacentElement('afterend',b)}
+(function(){const st=document.getElementById('settings');if(st&&!document.getElementById('notesBtn')){const b=document.createElement('button');b.type='button';b.id='notesBtn';b.className='notesbtn';b.textContent='업데이트 소식 · v1.8.5.3';b.onclick=showNotes;st.insertAdjacentElement('afterend',b)}
   let seen='';try{seen=localStorage.getItem('bb_notes_seen')||''}catch(e){}if(seen!==NOTES_VER)SPLASH_DONE.then(()=>setTimeout(showNotes,300))})();
 document.querySelectorAll('.pick').forEach(b=>b.onclick=()=>newGame(b.dataset.hero));refreshLocks();
 function showOnly(id){['titleOv','lvOv','pauseOv','endOv'].forEach(k=>$(k).hidden=k!==id);$('spBtn').hidden=id!==null;$('pzBtn').hidden=id!==null}
@@ -3574,7 +3574,7 @@ AU.load();
 const SHOP_UP=[{k:'hp',ic:'❤️',n:'최대 체력',v:3,d:l=>`+${l*3}`,max:20,cost:l=>15+l*12+Math.round(l*l/2)},{k:'atk',ic:'⚔️',n:'공격력',v:.015,d:l=>`+${+(l*1.5).toFixed(1)}%`,max:20,cost:l=>20+l*15+Math.round(l*l/2)},{k:'spd',ic:'👟',n:'이동 속도',v:.01,d:l=>`+${l}%`,max:16,cost:l=>15+l*12+Math.round(l*l/2)},
   {k:'xp',ic:'📗',n:'경험치 획득',v:.02,d:l=>`+${l*2}%`,max:20,cost:l=>15+l*12+Math.round(l*l/2)},{k:'mag',ic:'🧲',n:'줍기 범위',v:.04,d:l=>`+${l*4}%`,max:12,cost:l=>10+l*10+Math.round(l*l/2)},{k:'rr',ic:'🎲',n:'시작 다시 뽑기',d:l=>`+${l}회`,max:3,cost:l=>60+l*70},{k:'rev',ic:'💖',n:'부활 (체력 30%)',d:l=>l?'한 판에 1번':'없음',max:1,cost:()=>300}];
 const SUV=k=>SHOP_UP.find(u=>u.k===k).v*SH.lv(k);
-const SHOP_CHAR={yuenem:100,nid:100,angel:300,redpony:250};const SHN=id=>ROSTER[id].disp||(ROSTER[id].v?ROSTER[id].name+' · '+ROSTER[id].v:ROSTER[id].name); // 코인으로 해금하는 캐릭터(모습)
+const SHOP_CHAR={yuenem:100,nid:100,redpony:250,angel:300};const SHN=id=>ROSTER[id].disp||(ROSTER[id].v?ROSTER[id].name+' · '+ROSTER[id].v:ROSTER[id].name); // 코인으로 해금하는 캐릭터(모습)
 function charLocked(id){try{return !!SHOP_CHAR[id]&&!(SH.load(),SH.owns(id))}catch(e){return false}}
 function refreshLocks(){try{SHOP_CHAR}catch(e){return}document.querySelectorAll('.pick').forEach(b=>{const id=b.dataset.hero,L=!!SHOP_CHAR[id]&&charLocked(id);b.classList.toggle('shoplock',L);if(L)b.dataset.cost='🔒 🪙 '+SHOP_CHAR[id]+' 코인으로 해금';else delete b.dataset.cost})}
 const SH={data:{up:{}},lv(k){return (SH.data&&SH.data.up&&SH.data.up[k])|0},key(){return AU.on?'bb_shop_'+AU.s.uid:'bb_shop_guest'},
