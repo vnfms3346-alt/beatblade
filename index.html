@@ -3485,7 +3485,7 @@ function showNotes(){let d=document.getElementById('notesDlg');if(!d){d=document
     d.innerHTML=`<div class="nbody">${NOTES_HTML}</div><div class="nbtns"><button type="button" class="btn" id="notesOk">확인</button></div>`;document.body.appendChild(d);
     const close=()=>{try{localStorage.setItem('bb_notes_seen',NOTES_VER)}catch(e){}d.close()};d.querySelector('#notesOk').onclick=close;d.addEventListener('cancel',()=>{try{localStorage.setItem('bb_notes_seen',NOTES_VER)}catch(e){}});d.addEventListener('click',e=>{if(e.target===d)close()})}
   if(!d.open){if(d.showModal)d.showModal();else d.setAttribute('open','')}d.querySelector('#notesOk').focus()}
-(function(){const st=document.getElementById('settings');if(st&&!document.getElementById('notesBtn')){const b=document.createElement('button');b.type='button';b.id='notesBtn';b.className='notesbtn';b.textContent='업데이트 소식 · v1.13.8.0';b.onclick=showNotes;st.insertAdjacentElement('afterend',b)}
+(function(){const st=document.getElementById('settings');if(st&&!document.getElementById('notesBtn')){const b=document.createElement('button');b.type='button';b.id='notesBtn';b.className='notesbtn';b.textContent='업데이트 소식 · v1.13.8.1';b.onclick=showNotes;st.insertAdjacentElement('afterend',b)}
   let seen='';try{seen=localStorage.getItem('bb_notes_seen')||''}catch(e){}if(seen!==NOTES_VER)SPLASH_DONE.then(()=>setTimeout(showNotes,300))})();
 document.querySelectorAll('.pick').forEach(b=>b.onclick=()=>{if(performance.now()<PTOG)return;newGame(b.dataset.hero)});refreshLocks();
 function showOnly(id){['titleOv','lvOv','pauseOv','endOv'].forEach(k=>$(k).hidden=k!==id);$('spBtn').hidden=id!==null;$('pzBtn').hidden=id!==null}
@@ -3703,11 +3703,11 @@ function drawCutGif(c,t){const g=CUTGIF[c.gif],col=HC[c.id]||'#ffffff',k=H/540,c
   /* 2cut: 설순이 make_2cut.py — 어두워짐 0.16 → 1컷 미끄러져 들어옴 0.16 → 0.72초 째려봄 → 섬광 → 2컷 흔들리며 0.85초 → 왼쪽으로 빠짐 0.16 → 섬광 */
   const A=cgI(g.a),B=cgI(g.b),T1=.16,T2=.32,T3=1.04,T4=1.09,T5=1.94,T6=2.1;
   ctx.fillStyle=`rgba(0,0,0,${.5*cl(t/T1,0,1)})`;ctx.fillRect(0,0,W,H);
-  const cover=(im,sc,dx,sx,sy)=>{const s0=Math.max(W/im.naturalWidth,H/im.naturalHeight)*sc,iw=im.naturalWidth*s0,ih=im.naturalHeight*s0,x=cl(W/2-iw*.55,W-iw,0);ctx.drawImage(im,x+dx+sx,(H-ih)/2+sy,iw,ih)};
-  if(t>=T1&&t<T3&&A){const q=cl((t-T1)/(T2-T1),0,1);cover(A,t<T2?1.12-.1*q:1.02-.024*(t-T2)/(T3-T2)*1,t<T2?W*(1-q)*(1-q):0,0,0)}
+  const tallS=H>W*1.15,cover=(im,sc,dx,sx,sy)=>{/* 1.13.8.1 확대하지 않고 화면 안에 들어오는 한 장(만화 칸): 가로 화면 폭 88%·높이 80% 안, 세로 화면 폭 96% · 테두리 */const s0=Math.min(W*(tallS?.96:.88)/im.naturalWidth,H*(tallS?.5:.8)/im.naturalHeight)*sc,iw=im.naturalWidth*s0,ih=im.naturalHeight*s0,x=(W-iw)/2+dx+sx,y=(H-ih)/2+sy;ctx.fillStyle='#0b0b10';ctx.fillRect(x-6,y-6,iw+12,ih+12);ctx.fillStyle='#fff';ctx.fillRect(x-3,y-3,iw+6,ih+6);ctx.drawImage(im,x,y,iw,ih)};
+  if(t>=T1&&t<T3&&A){const q=cl((t-T1)/(T2-T1),0,1);cover(A,t<T2?1.06-.06*q:1-.02*(t-T2)/(T3-T2),t<T2?W*(1-q)*(1-q):0,0,0)}
   if(t>=T3&&t<T4&&A)cover(A,1,0,0,0);
-  if(t>=T4&&t<T6&&B){const i=Math.floor((t-T4)/.05),sh=[[0,10],[-8,-5],[6,4],[-3,-2],[0,0]][Math.min(4,i)],o=cl((t-T5)/(T6-T5),0,1);cover(B,t<T4+.25?1.06-.01*i:1.01-.02*(t-T4-.25)/.6,-W*o*o,sh[0]*k,sh[1]*k);
-    const fs=Math.round(Math.min(H>W*1.15?W/8:W/13,68));ctx.font=`800 ${fs}px ${FD}`;const tw=ctx.measureText(c.name).width;nameAt(H>W*1.15?W/2:tw/2+fs*.6,H>W*1.15?H*.82:H-fs*1.3,fs,cl((t-T4)/.12,0,1)*(1-o),-.06)}
+  if(t>=T4&&t<T6&&B){const i=Math.floor((t-T4)/.05),sh=[[0,10],[-8,-5],[6,4],[-3,-2],[0,0]][Math.min(4,i)],o=cl((t-T5)/(T6-T5),0,1);cover(B,t<T4+.25?1.03-.006*i:1-.02*(t-T4-.25)/.6,-W*o*o,sh[0]*k,sh[1]*k);
+    const fs=Math.round(Math.min(H>W*1.15?W/8:W/13,68));ctx.font=`800 ${fs}px ${FD}`;const tw=ctx.measureText(c.name).width;nameAt(H>W*1.15?W/2:Math.max(tw/2+fs*.6,W*.06+tw/2),H>W*1.15?H*.5+W*.96*9/32+fs*1.1:H*.9-fs*.6,fs,cl((t-T4)/.12,0,1)*(1-o),-.06)}
   flash(t>=T3&&t<T4?.85:t>=T4&&t<T4+.05?.4:t>=T4+.05&&t<T4+.1?.1:t>=T6?.6*(1-cl((t-T6)/.06,0,1)):0)}
 function needCutLD(id){needCutGif(id);if(CUTART[id]&&!CUTAIM[id]){const im=new Image();im.decoding='async';im.src=CUTART[id];if(im.decode)im.decode().catch(()=>{});CUTAIM[id]=im}if(!CUTLD[id]||CUTIM[id])return;const im=new Image();im.decoding='async';im.src=CUTLD[id];if(im.decode)im.decode().catch(()=>{});CUTIM[id]=im}
 const cutLD=id=>{const im=CUTIM[id];return im&&im.complete&&im.naturalWidth?im:null};
