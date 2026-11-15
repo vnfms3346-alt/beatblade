@@ -269,7 +269,7 @@ h1.brand.kr .en{font-family:var(--f-title);font-weight:900;letter-spacing:.05em}
 
 /* v56 시작 스플래시 */
 #splash{position:fixed;inset:0;z-index:9999;isolation:isolate;overflow:hidden;background:var(--night);cursor:pointer;transition:opacity .6s ease}
-#splash .sp-back{position:absolute;inset:-60px;background:url('assets/opening_poster2.webp') center 30%/cover no-repeat;filter:blur(30px) brightness(.4);z-index:-3}
+#splash .sp-back{position:absolute;inset:-60px;background:url('assets/opening_poster3.webp') center 30%/cover no-repeat;filter:blur(30px) brightness(.4);z-index:-3}
 /* 1.10.0.0 오프닝 영상(경화수월) */#splash .sp-vid{width:100%;height:100%;object-fit:cover;object-position:50% 20%;animation:none}#splash .sp-col:has(.sp-vid){width:min(100%,calc(100dvh*.66))}
 #splash .sp-stage{position:absolute;inset:0;z-index:-2;transition:transform .6s ease}
 #splash .sp-col{position:absolute;inset-block:0;left:50%;width:min(100%,724px);transform:translateX(-50%);-webkit-mask-image:linear-gradient(90deg,transparent,#000 13%,#000 87%,transparent);mask-image:linear-gradient(90deg,transparent,#000 13%,#000 87%,transparent)}
@@ -388,7 +388,7 @@ dialog.notes{background:linear-gradient(180deg,#e6d8bd,#d9c8a8);border:1px solid
 .shmsg{min-height:18px;color:#2f8a62;font-weight:700;margin:6px 0 0}
 </style>
 
-<div id="splash" role="button" tabindex="0" aria-label="화면을 눌러 시작"><div class="sp-back" aria-hidden="true"></div><div class="sp-stage" aria-hidden="true"><div class="sp-col"><video class="sp-img sp-vid" src="assets/opening2.mp4" poster="assets/opening_first2.webp" playsinline preload="auto"></video></div></div><div class="sp-shade" aria-hidden="true"></div><div class="sp-brand" id="spBrand"></div><p class="sp-hint">화면을 눌러 시작</p></div>
+<div id="splash" role="button" tabindex="0" aria-label="화면을 눌러 시작"><div class="sp-back" aria-hidden="true"></div><div class="sp-stage" aria-hidden="true"><div class="sp-col"><video class="sp-img sp-vid" src="assets/opening3.mp4" poster="assets/opening_first3.webp" playsinline preload="auto"></video></div></div><div class="sp-shade" aria-hidden="true"></div><div class="sp-brand" id="spBrand"></div><p class="sp-hint">화면을 눌러 시작</p></div>
 <div id="app">
   <div class="stage" id="stage">
     <canvas id="cv"></canvas>
@@ -3496,7 +3496,7 @@ function showNotes(){let d=document.getElementById('notesDlg');if(!d){d=document
     d.innerHTML=`<div class="nbody">${NOTES_HTML}</div><div class="nbtns"><button type="button" class="btn" id="notesOk">확인</button></div>`;document.body.appendChild(d);
     const close=()=>{try{localStorage.setItem('bb_notes_seen',NOTES_VER)}catch(e){}d.close()};d.querySelector('#notesOk').onclick=close;d.addEventListener('cancel',()=>{try{localStorage.setItem('bb_notes_seen',NOTES_VER)}catch(e){}});d.addEventListener('click',e=>{if(e.target===d)close()})}
   if(!d.open){if(d.showModal)d.showModal();else d.setAttribute('open','')}d.querySelector('#notesOk').focus()}
-(function(){const st=document.getElementById('settings');if(st&&!document.getElementById('notesBtn')){const b=document.createElement('button');b.type='button';b.id='notesBtn';b.className='notesbtn';b.textContent='업데이트 소식 · v1.13.10.1';b.onclick=showNotes;st.insertAdjacentElement('afterend',b)}
+(function(){const st=document.getElementById('settings');if(st&&!document.getElementById('notesBtn')){const b=document.createElement('button');b.type='button';b.id='notesBtn';b.className='notesbtn';b.textContent='업데이트 소식 · v1.13.10.2';b.onclick=showNotes;st.insertAdjacentElement('afterend',b)}
   let seen='';try{seen=localStorage.getItem('bb_notes_seen')||''}catch(e){}if(seen!==NOTES_VER)SPLASH_DONE.then(()=>setTimeout(showNotes,300))})();
 document.querySelectorAll('.pick').forEach(b=>b.onclick=()=>{if(performance.now()<PTOG)return;newGame(b.dataset.hero)});refreshLocks();
 function showOnly(id){['titleOv','lvOv','pauseOv','endOv'].forEach(k=>$(k).hidden=k!==id);$('spBtn').hidden=id!==null;$('pzBtn').hidden=id!==null}
