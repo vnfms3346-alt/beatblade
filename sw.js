@@ -1,6 +1,6 @@
 /* 박자 대난투 앱(PWA) 서비스워커 — 게임 화면(html)·version.json은 항상 새로 받고(오프라인일 때만 저장본),
    그림·효과 파일은 저장본을 먼저 보여 주고 뒤에서 새로 받아 둠. 영상·소리(mp4/mp3)와 다른 사이트(Firebase 등)는 건드리지 않음. */
-const C='bb-app-v2';
+const C='bb-app-v3';
 self.addEventListener('install',e=>self.skipWaiting());
 self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
 self.addEventListener('fetch',e=>{
