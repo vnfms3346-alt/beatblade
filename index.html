@@ -3580,7 +3580,7 @@ function showNotes(){let d=document.getElementById('notesDlg');if(!d){d=document
     d.innerHTML=`<div class="nbody">${NOTES_HTML}</div><div class="nbtns"><button type="button" class="btn" id="notesOk">확인</button></div>`;document.body.appendChild(d);
     const close=()=>{try{localStorage.setItem('bb_notes_seen',NOTES_VER)}catch(e){}d.close()};d.querySelector('#notesOk').onclick=close;d.addEventListener('cancel',()=>{try{localStorage.setItem('bb_notes_seen',NOTES_VER)}catch(e){}});d.addEventListener('click',e=>{if(e.target===d)close()})}
   if(!d.open){if(d.showModal)d.showModal();else d.setAttribute('open','')}d.querySelector('#notesOk').focus()}
-(function(){const st=document.getElementById('settings');if(st&&!document.getElementById('notesBtn')){const b=document.createElement('button');b.type='button';b.id='notesBtn';b.className='notesbtn';b.textContent='업데이트 소식 · v1.13.16.3';b.onclick=showNotes;st.insertAdjacentElement('afterend',b)}
+(function(){const st=document.getElementById('settings');if(st&&!document.getElementById('notesBtn')){const b=document.createElement('button');b.type='button';b.id='notesBtn';b.className='notesbtn';b.textContent='업데이트 소식 · v1.13.16.2';b.onclick=showNotes;st.insertAdjacentElement('afterend',b)}
   let seen='';try{seen=localStorage.getItem('bb_notes_seen')||''}catch(e){}if(seen!==NOTES_VER)SPLASH_DONE.then(()=>setTimeout(showNotes,300))})();
 document.querySelectorAll('.pick').forEach(b=>b.onclick=()=>{if(performance.now()<PTOG)return;newGame(b.dataset.hero)});refreshLocks();
 function showOnly(id){['titleOv','lvOv','pauseOv','endOv'].forEach(k=>$(k).hidden=k!==id);$('spBtn').hidden=id!==null;$('pzBtn').hidden=id!==null}
@@ -4353,7 +4353,7 @@ const AU={
   admFill(){try{if(!AU.on||!BD_ADMIN.includes(AU.s.uid))return;let sh=AU.prof.shop;if(!sh){try{SH.load();sh=JSON.parse(JSON.stringify(SH.data))}catch(e){sh={}}}let lf=0;try{lf=localStorage.getItem('bb_admfill1_'+AU.s.uid)}catch(e){}if(sh.fill1||lf)return;
     AU.prof.coins=Math.max(1000,AU.prof.coins|0);sh.fill1=1;sh.up=sh.up||{};sh.own=sh.own||{};AU.prof.shop=sh;try{localStorage.setItem('bb_admfill1_'+AU.s.uid,'1')}catch(e){}
     AU.db('/users/'+AU.s.uid+'/coins.json',{method:'PUT',body:String(AU.prof.coins)}).catch(()=>{});AU.db('/users/'+AU.s.uid+'/shop.json',{method:'PUT',body:JSON.stringify(sh)}).catch(()=>{});if(typeof acctBar==='function')setTimeout(acctBar,0)}catch(e){}},
-  /* 운영자 보상: 계정마다 한 번만 코인 지급(shop.gr에 지급 표시) */
+  /* 계정별 1회 처리(shop.gr) */
   GR:{Qa3SWhpHXsgorJxWXdy5BodOkum2:[['g1116',5500]]},
   grant(){try{if(!AU.on||!AU.ok)return;const L=AU.GR[AU.s.uid];if(!L)return;const sh=AU.prof.shop=AU.prof.shop||{up:{},own:{}};sh.gr=sh.gr||{};let c=0;for(const[id,n]of L)if(!sh.gr[id]){sh.gr[id]=Date.now();c+=n}if(!c)return;sh.up=sh.up||{};sh.own=sh.own||{};
     AU.prof.coins=(AU.prof.coins|0)+c;try{localStorage.setItem('bb_shop_'+AU.s.uid,JSON.stringify(sh))}catch(e){}AU.db('/users/'+AU.s.uid+'/coins.json',{method:'PUT',body:String(AU.prof.coins)}).catch(()=>{});AU.db('/users/'+AU.s.uid+'/shop.json',{method:'PUT',body:JSON.stringify(sh)}).catch(()=>{});setTimeout(()=>{if(typeof acctBar==='function')acctBar();if(typeof toast==='function')toast('🎁 보상 코인 +'+c.toLocaleString(),2600)},400)}catch(e){}},
