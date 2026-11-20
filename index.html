@@ -14,6 +14,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Song+Myung&family=Jua&family=Nanum+Brush+Script&family=Do+Hyeon&family=Gaegu:wght@700&family=Cinzel:wght@700;900&family=Gowun+Dodum&family=IBM+Plex+Mono:wght@500;600&display=swap">
 <style>
+/* 1.14.5.x 딘코 필살기 레드 러시 → 비트 버스트(에어로빅 컷인에 맞춤) */
 /* Layout: one-screen top-down survival field — canvas fills the stage, a thin XP rail and HUD sit on its top edge; level-up cards and menus overlay the field */
 :root{
   --night:#10161d; --moss:#18211f; --rule:#34433f; --mist:#9fb2ab; --paper:#efe8da;
@@ -910,7 +911,7 @@ const HERO={
   idaxe:['axe',120,168,'체력이 낮을수록 피해 증가 (최대 +35%)'],
 };
 const HC={violetB:'#7fe8ff',damiroK:'#b9c8ff',gahee:'#ff4a60',marjanao:'#ff5a6a',marjanam:'#ffe08a',ruby:'#ff6b7a',cmong:'#8fd0ff',nobu2:'#ff6aa8',nobu3:'#ff6aa8',gymgl:'#ff8a7a',graygl:'#c8d0dc',vest:'#ffd3a0',guitar:'#ff6ad0',wingcat:'#bcd4ff',sage:'#ffd76a',deer:'#a8e07a',suryeo:'#ffd8a0',hanbyul:'#fff0d8',santa:'#ff5a4a',idtrip:'#9ae6d8',nobu:'#ff6aa8',kate:'#ffe0a0',yue:'#ff4a5a',yuenem:'#8fb8ff',glassesB:'#6ad0ff',korea:'#ffb3d9',nid:'#9fd8ff',nidB:'#9fd8ff',knight:'#cfe0ff',elf:'#7be0b0',princess:'#f7a8c8',violet:'#b98cff',lion:'#ffc24a',devil:'#ff4d6a',angel:'#fff0c0',mage:'#ff8fd0',ribbon:'#ff5a3a',sleepy:'#c7a8ff',glasses:'#8fe3ff',yeon:'#ffe9a8',bunny:'#ff8ab8',bunnym:'#b9a8ff',damiro:'#ff9ac0',pinkbunny:'#ff7ab8',lumen:'#ffd84a',kamil:'#7fe09a',violetR:'#d8c8ff',damirof:'#ffc06a',coffee:'#d9a066',redpony:'#ff4a2a',saurisP:'#ff9ad0',seolM:'#7fe0b8',idaxe:'#ff3d6e'};
-const HPART={violetB:'star',damiroK:'glint',gahee:'glint',marjanao:'glint',marjanam:'glint',ruby:'petal',cmong:'glint',nobu2:'heart',nobu3:'heart',gymgl:'star',graygl:'glint',vest:'star',guitar:'note',wingcat:'feather',sage:'paper',deer:'leaf',suryeo:'leaf',hanbyul:'star',santa:'star',idtrip:'petal',nobu:'heart',kate:'spark',yuenem:'glint',glassesB:'bubble',korea:'star',nid:'flake',nidB:'flake',knight:'spark',elf:'leaf',princess:'petal',violet:'star',lion:'ember',devil:'note',angel:'feather',mage:'star',ribbon:'ember',sleepy:'bubble',glasses:'glint',yeon:'paper',bunny:'petal',bunnym:'spark',damiro:'heart',pinkbunny:'heart',lumen:'spark',kamil:'leaf',violetR:'star',damirof:'spark',coffee:'bubble',redpony:'ember',yue:'star',saurisP:'petal',seolM:'glint',idaxe:'heart'};
+const HPART={violetB:'star',damiroK:'glint',gahee:'glint',marjanao:'glint',marjanam:'glint',ruby:'petal',cmong:'glint',nobu2:'heart',nobu3:'heart',gymgl:'star',graygl:'glint',vest:'star',guitar:'note',wingcat:'feather',sage:'paper',deer:'leaf',suryeo:'leaf',hanbyul:'star',santa:'star',idtrip:'petal',nobu:'heart',kate:'spark',yuenem:'glint',glassesB:'bubble',korea:'star',nid:'flake',nidB:'flake',knight:'spark',elf:'leaf',princess:'petal',violet:'star',lion:'ember',devil:'note',angel:'feather',mage:'star',ribbon:'note',sleepy:'bubble',glasses:'glint',yeon:'paper',bunny:'petal',bunnym:'spark',damiro:'heart',pinkbunny:'heart',lumen:'spark',kamil:'leaf',violetR:'star',damirof:'spark',coffee:'bubble',redpony:'ember',yue:'star',saurisP:'petal',seolM:'glint',idaxe:'heart'};
 
 /* ---------- weapons ----------
    every weapon: name, ic, max level, desc(l) for the card, sig = hero that owns it (signatures are exclusive) */
@@ -2690,7 +2691,7 @@ const SPECIAL={
   devil:{name:'앙코르',desc:'무대 조명 아래 8박 동안 모든 무기가 두 배로 연주됨'},
   angel:{name:'심판의 고리',desc:'천사와 악마의 날개 사이로 하늘의 고리가 열려, 빛과 붉은 심판의 기둥 12줄기가 꽂힘, 체력 20 회복'},
   mage:{name:'지옥의 파수견',desc:'소환 카드를 지옥불에 태워 땅을 가르고 지옥문을 연다. 불기둥과 함께 솟아오른 케르베로스가 지옥불을 두르고 돌진해 길을 불태우고, 멈춰 서서 세 머리로 업화를 뿜은 뒤 지옥불 기둥 여섯 줄기를 터뜨림. 맞은 적은 불붙어 계속 피해'},
-  ribbon:{name:'레드 러시',desc:'앞쪽 멀리까지 스물네 번 연타하며 주먹을 날리고, 마지막에 거대한 주먹이 날아가 붉은 불기둥'},
+  ribbon:{name:'비트 버스트',desc:'박자에 맞춰 원·투 스텝 네 번, 스텝마다 음파가 퍼지고, 마지막 점프 킥에서 거대한 음파 고리가 터져 주변을 기절시킴'},
   sleepy:{name:'고글 플래시',desc:'고글이 번쩍! 화면의 적을 모두 멍하게 만들고(멍한 적은 피해 +50%), 비눗방울 16개가 터지며, 6초 동안 회피 50%와 체력 회복'},
   glasses:{name:'분석 완료',desc:'화면의 적 최대 18명을 조준해 일제히 꿰뚫음, 당근 회수'},
   yeon:{name:'밤샘 마감',desc:'원고로 내리찍어 충격파, 화면에 원고 폭우, 8박 동안 이동 속도 +35%'},
@@ -2789,44 +2790,86 @@ function spBody(id,m,vis,pn){
           thinRing(x,sy(G.y),200*U*(.3+.7*e),6*U*al,'#ffd23a',al,.45);glow(x,y,120*U*al,'#ffe27a',.5*al);ctx.globalCompositeOperation='source-over';
           const pop=q<.15?.6+q/.15*.55:1.15-.15*Math.min(1,(q-.15)/.3);lionPic(LION_ROAR,x+ux*20*U,y-130*U,200*U*pop,fl,q<.6?1:Math.max(0,1-(q-.6)/.4),Math.cos(ang)*.06)}
         ctx.globalCompositeOperation='source-over'}});sfx.wind(ac.currentTime)}
-  if(id==='ribbon'){const l=Math.hypot(G.lmx,G.lmy)||1,ang=Math.atan2(G.lmy/l,G.lmx/l),ca=Math.cos(ang),sa=Math.sin(ang);if(Math.abs(G.lmx)>.1)G.face=Math.sign(G.lmx);G.iT=Math.max(G.iT,2.2);const RP=['#ff2a3a','#5a0a0a'],sprId=G.skin||'ribbon';
-    // 피니시: 거대 주먹이 날아가 불기둥
-    const flyFist=()=>{const hit=new Set(),R=78,L=460,sp=950;addEnt({k:'rfist',t:0,x:G.x+ca*30,y:heroCY()+sa*24,tr:[],upd(dt){this.t+=dt;const d=sp*dt;this.x+=ca*d;this.y+=sa*d*.85;this.tr.push([this.x,this.y]);if(this.tr.length>12)this.tr.shift();
-        inCircle(this.x,this.y,R,f=>{if(hit.has(f))return;hit.add(f);hurtFoe(f,150*m,ca*300,sa*300,{frz:.8,kind:'stun'});hitBurst(f.x,foeCY(f),'#ffd0b0','#ff2a3a',34)});
-        if(this.t*sp>=L&&!this.boom){this.boom=1;const bx=this.x,by=this.y;inCircle(bx,by,180,f=>{if(!hit.has(f))hurtFoe(f,120*m,0,-60,{frz:.6,kind:'stun'})});G.shake=1.2;sfx.boom(ac.currentTime);wordPop(bx,by-150,'K.O.!','#ffffff',46,1,-.1);if(!LOWFX)emit(bx,by-30,34,{type:'ember',c:'#ff5a3a',a:-Math.PI/2,spread:.8,sp:620,g:300,life:.9,s:6});
-          addEnt({k:'rpill',t:0,upd(dt){this.t+=dt;return this.t<1},drw(sx,sy){const e=this.t,X=sx(bx),Y=sy(by+20),h=fxCap(420*U,.5)*Math.min(1,e*4),w=95*U*(1-e*.6),g=ctx.createLinearGradient(0,Y-h,0,Y);g.addColorStop(0,'rgba(255,90,58,0)');g.addColorStop(.4,rgba('#ff3a2a',.7*(1-e)));g.addColorStop(.85,rgba('#ffb08a',.9*(1-e)));g.addColorStop(1,rgba('#fff4e0',1-e));
-            ctx.globalCompositeOperation='lighter';ctx.fillStyle=g;ctx.beginPath();ctx.ellipse(X,Y-h/2,w,Math.max(1,h/2),0,0,7);ctx.fill();for(let i=0;i<3;i++)thinRing(X,Y,180*U*Math.min(1,e*1.6+i*.12),5*U*(1-e)+.5,i?'#ffd0b0':'#ff5a3a',1-e,.5);spikes(X,Y-8*U,170*U*(.6+.5*e),18,'#ffe0c8',1-e);glow(X,Y-60*U,200*U,'#ff5a3a',.5*(1-e));ctx.globalCompositeOperation='source-over';if(e<.5)burstStar(X,Y-20*U,120*U*(1-e),'#ffd0b0','#ff2a3a',(1-e*2),e)}});return false}return this.t*sp<L+1},
-      drw(sx,sy){const X=sx(this.x),Y=sy(this.y);ctx.globalCompositeOperation='lighter';for(let i=1;i<this.tr.length;i++){const a=i/this.tr.length;taper(sx(this.tr[i-1][0]),sy(this.tr[i-1][1]),sx(this.tr[i][0]),sy(this.tr[i][1]),40*U*a,'#ff2a3a',.5*a);taper(sx(this.tr[i-1][0]),sy(this.tr[i-1][1])-8*U,sx(this.tr[i][0]),sy(this.tr[i][1])-8*U,6*U*a,'#ffffff',.6*a)}speedLines(X,Y,ang,160*U,10,60*U,'#ffffff',.6,(this.t*40)|0);glow(X,Y,110*U,'#ff3a3a',.6);ctx.globalCompositeOperation='source-over';fistDraw(X,Y,48*U,Math.atan2(sa*.85,ca),1,RP[0],RP[1])}})};
-    ov({ov:false,n:0,hits:[],ph:0,upd(dt){this.t+=dt;
-        // 1) 스텝 인
-        if(this.t<.3){G.x+=ca*520*dt;G.y+=sa*440*dt;mapClamp(G);if(!this.s0){this.s0=1;G.atkAnim={a:'run',t0:performance.now()};sfx.wind(ac.currentTime)}}
-        // 2) 러시: 24연타 (좌우 번갈아), 적을 중심선으로 끌어당김
-        else if(this.n<24){while(this.n<24&&this.t>=.3+this.n*.042){this.n++;const side=this.n%2?1:-1,a=ang+side*(.12+Math.random()*.25),r=70+Math.random()*230,px=G.x+Math.cos(a)*r,py=heroCY()+Math.sin(a)*r*.8;this.hits.push({x:px,y:py,t0:this.t,a,side});
-            inCircle(px,py,52,f=>{hurtFoe(f,20*m,ca*25,sa*25,{frz:.3,kind:'stun'});if(this.n%3===0)hitBurst(f.x,foeCY(f),'#ffffff','#ff2a3a',24)});G.atkAnim={a:this.n%2?'punch':'kick',t0:performance.now()};if(this.n%3===0)sfx.slash(ac.currentTime);
-            if(this.n===8)wordPop(G.x,G.y-150,'8 HIT','#ffd0b0',26,.5,.1);if(this.n===16)wordPop(G.x,G.y-160,'16 HIT!','#ff8a6a',32,.55,-.1);if(this.n===24)wordPop(G.x,G.y-170,'24 HIT!!','#ff3a3a',40,.7,.08)}
-          for(const f of G.foes){if(f.dead||BIG(f))continue;const dx=f.x-G.x,dy=foeCY(f)-heroCY(),al=dx*ca+dy*sa;if(al<40||al>340)continue;const pr=-dx*sa+dy*ca;f.x-=-sa*pr*2.2*dt;f.y-=ca*pr*2.2*dt}}
-        // 3) 어퍼컷 → 거대 주먹
-        else if(!this.up){this.up=this.t;inCone(G.x,heroCY(),ang,200,.9,f=>hurtFoe(f,60*m,ca*120,-520,{frz:.9,kind:'stun'}));G.atkAnim={a:'special',t0:performance.now()};G.shake=.8;sfx.boom(ac.currentTime);if(!LOWFX)emit(G.x+ca*60,heroCY(),16,{type:'ember',c:'#ff5a3a',a:-Math.PI/2,spread:.6,sp:420,g:400,life:.7,s:5})}
-        else if(this.t>=this.up+.35&&!this.fly){this.fly=1;flyFist()}
-        return this.fly?this.t<this.up+2:true},
-      drw(sx,sy){const x=sx(G.x),y=sy(heroCY()),t=this.t,amp=this.up?Math.max(0,1-(t-this.up)/1.2):Math.min(1,t*3);ctx.globalCompositeOperation='lighter';
-        // 스텝 인 잔상 + 속도선
-        if(t<.5){const q=Math.max(0,1-t/.5);speedLines(x,y,ang,220*U,14,70*U,'#ff6a5a',.7*q,3);ctx.globalCompositeOperation='source-over';for(let k=1;k<=3;k++)drawSpr(sprId,'run',k,x-ca*k*26*U,sy(G.y)-sa*k*22*U,U*HS,G.face,{alpha:.28*q*(1-k*.2)});ctx.globalCompositeOperation='lighter'}
-        // 러시 콘 + 속도선
-        if(amp>0){ctx.fillStyle=rgba('#ff3a2a',.1*amp);ctx.beginPath();ctx.moveTo(x,y);ctx.arc(x,y,fxCap(330*U),ang-.4,ang+.4);ctx.closePath();ctx.fill();
-          for(let i=0;i<12;i++){const a=ang+(hash(i,Math.floor(t*24))-.5)*.8,r0=40*U,r1=(140+hash(i,7)*200)*U;taper(x+Math.cos(a)*r0,y+Math.sin(a)*r0*.8,x+Math.cos(a)*r1,y+Math.sin(a)*r1*.8,3*U,i%3?'#ff8a6a':'#ffffff',.45*amp)}glow(x,y,70*U,'#ff5a3a',.45*amp)}
-        // 연타 주먹: 큰 빨간 글러브 + 충격 링
-        for(const h of this.hits){const q=(t-h.t0)/.3;if(q>1)continue;const X=sx(h.x),Y=sy(h.y),f=1-q;thinRing(X,Y,(16+40*q)*U,3*U*f,'#ff5a3a',f,.7);glow(X,Y,34*U,'#ff7a5a',.5*f);ctx.save();ctx.translate(X,Y);ctx.rotate(ang+h.side*.5);ctx.scale(.4,1);thinRing(0,0,(20+26*q)*U,2.5*U,'#ffffff',f*.8);ctx.restore();
-          if(q<.25)star4(X,Y,34*U*(1-q*2),'#ffffff',1-q*3,h.a)}
-        // 붉은 리본 잔광 (머리 리본)
-        if(amp>0){for(let k=0;k<2;k++)silkRibbon(x-G.face*8*U,y-60*U,Math.PI+(G.face>0?0:Math.PI)*0+ang+Math.PI+(k-.5)*.5,(60+30*Math.sin(t*20))*U,t*25+k*2,7*U,k?'#ff2a3a':'#ff8a8a',.7*amp)}
-        // 화면 가장자리 붉은 맥동(약하게)
-        const pulse=amp*(.14+.08*Math.sin(t*30));const gE=ctx.createRadialGradient(W/2,H/2,Math.min(W,H)*.4,W/2,H/2,Math.max(W,H)*.75);gE.addColorStop(0,'rgba(255,40,30,0)');gE.addColorStop(1,rgba('#ff2a1a',pulse));ctx.fillStyle=gE;ctx.fillRect(-20,-20,W+40,H+40);
-        ctx.globalCompositeOperation='source-over';
-        for(const h of this.hits){const q=(t-h.t0)/.3;if(q>1)continue;fistDraw(sx(h.x),sy(h.y),(16+6*(1-q))*U,ang+h.side*.35,1-q,RP[0],RP[1])}
-        // 어퍼컷
-        if(this.up){const e=Math.min(1,(t-this.up)/.5);if(e<1){ctx.globalCompositeOperation='lighter';const ux=x+ca*90*U,uy=y-e*160*U;taper(x+ca*60*U,y+20*U,ux,uy,30*U*(1-e),'#ff2a3a',.6*(1-e));taper(x+ca*60*U,y+20*U,ux,uy,10*U,'#ffffff',(1-e)*.8);glow(ux,uy,70*U,'#ff3a3a',.7*(1-e));ctx.globalCompositeOperation='source-over';fistDraw(ux,uy,40*U,-Math.PI/2,1-e*.5,RP[0],RP[1])}
-          if(e<.7){ctx.save();ctx.translate(x,y-170*U);ctx.rotate(-.08);ctx.font=`900 ${Math.round(44*U*(1+.4*(1-e)))}px ${FD}`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.globalAlpha=1-e/.7;ctx.lineJoin='round';ctx.lineWidth=9*U;ctx.strokeStyle='#4a0a06';ctx.strokeText('RED RUSH!!',0,0);ctx.lineWidth=3*U;ctx.strokeStyle='#ff2a3a';ctx.strokeText('RED RUSH!!',0,0);ctx.fillStyle='#ffffff';ctx.fillText('RED RUSH!!',0,0);ctx.restore();ctx.globalAlpha=1}}}});sfx.wind(ac.currentTime)}
+  if(id==='ribbon'){
+    const l=Math.hypot(G.lmx,G.lmy)||1,ang=Math.atan2(G.lmy/l,G.lmx/l),ca=Math.cos(ang),sa=Math.sin(ang);
+    const beatStep=Number.isFinite(SPB)&&SPB>0?SPB/2:.22;
+    const jumpT=.24,launch=4*beatStep,impact=launch+jumpT*.65,land=launch+jumpT;
+    const pink='#ff3a6a',light='#ff8fc0',white='#ffffff',counts=['ONE!','TWO!','THREE!','FOUR!'];
+    if(Math.abs(G.lmx)>.1)G.face=Math.sign(G.lmx);
+    G.iT=Math.max(G.iT,2.2);
+    const wave=(x,y,r,finish)=>{
+      const duration=finish?.62:.3,delay=.1,rings=finish?3:1;
+      addEnt({k:'beatWave',t:0,upd(dt){this.t+=dt;return this.t<duration+(rings-1)*delay},
+        drw(sx,sy){
+          const X=sx(x),Y=sy(y),cap=fxCap(r*U,.55);
+          ctx.globalCompositeOperation='lighter';
+          for(let i=0;i<rings;i++){
+            const p=(this.t-i*delay)/duration;
+            if(p<0||p>=1)continue;
+            thinRing(X,Y,cap*(.14+.86*p),(finish?2.5+7*(1-p):1.5+3.5*(1-p))*U,[pink,white,light][i],1-p,.85);
+          }
+          const p=Math.min(1,this.t/duration),a=1-p;
+          if(finish){
+            const bars=LOWFX?8:20;
+            ctx.globalAlpha=a;
+            for(let i=0;i<bars;i++){
+              const angle=i/bars*Math.PI*2,radius=cap*(.46+.16*p);
+              const height=fxCap((26+60*hash(i,2))*U,.16)*Math.sin(Math.PI*p);
+              ctx.fillStyle=i%3===0?white:i%2?pink:light;
+              ctx.fillRect(X+Math.cos(angle)*radius-2*U,Y+Math.sin(angle)*radius*.72-height,4*U,height);
+            }
+            ctx.globalAlpha=1;
+            if(!LOWFX)burstStar(X,Y,100*U*a,white,pink,a);
+          }
+          if(!LOWFX)glow(X,Y,fxCap((finish?190:70)*U),pink,(finish?.6:.4)*a);
+          ctx.globalCompositeOperation='source-over';
+        }});
+    };
+    ov({k:'beatBurst',ov:false,n:0,lift:0,upd(dt){
+      const prev=this.t;
+      this.t+=dt;
+      while(this.n<4&&this.t>=this.n*beatStep){
+        const x=G.x,y=G.y;
+        inCircle(x,y,160,(f,d)=>{
+          const push=20/Math.max(1,d);
+          hurtFoe(f,24*m,(f.x-x)*push,(foeCY(f)-y)*push);
+        });
+        wave(x,y,160,false);
+        emit(x,y-12,LOWFX?2:5,{type:'note',c:light,a:-Math.PI/2,spread:1.5,sp:90,up:45,life:.42,s:8});
+        wordPop(x,y-88,counts[this.n],white,26,.4,this.n%2?.09:-.09);
+        G.atkAnim={a:ROSTER[id].a2,t0:performance.now()};
+        G.shake=Math.max(G.shake,.18);
+        sfx.slash(ac.currentTime);
+        this.n++;
+      }
+      if(this.t>=launch&&prev<land){
+        const dash=Math.max(0,Math.min(this.t,land)-Math.max(prev,launch));
+        const beforeKick=Math.max(0,Math.min(this.t,impact)-Math.max(prev,launch));
+        const moveHero=seconds=>{G.x+=ca*240*seconds;G.y+=sa*240*seconds;mapClamp(G)};
+        moveHero(beforeKick);
+        if(prev<launch)G.atkAnim={a:ROSTER[id].a2,t0:performance.now()};
+        const progress=Math.min(1,(this.t-launch)/jumpT);
+        this.lift=progress<1?Math.sin(Math.PI*progress)*38:0;
+        if(prev<impact&&this.t>=impact){
+          const tip={x:G.x+ca*56,y:heroCY()+sa*56};
+          mapClamp(tip);
+          inCircle(tip.x,tip.y,250,(f,d)=>{
+            // 발끝 직격에 피해를 집중해 단일 대상 위력을 보존한다.
+            hurtFoe(f,(104+(d<36+f.r*.6?450:0))*m,ca*90,sa*90,{frz:1.1,kind:'stun'});
+            if(!LOWFX)hitBurst(f.x,foeCY(f),white,pink,30);
+          });
+          wave(tip.x,tip.y,250,true);
+          emit(tip.x,tip.y,LOWFX?5:18,{type:'note',c:light,sp:270,up:90,life:.7,s:12});
+          emit(tip.x,tip.y,LOWFX?3:12,{type:'star',c:white,sp:240,up:70,life:.55,s:8});
+          G.shake=Math.max(G.shake,1.1);
+          sfx.boom(ac.currentTime);
+          wordPop(tip.x,tip.y-96,'BEAT BURST!',white,42,.8,-.08);
+        }
+        moveHero(dash-beforeKick);
+      }
+      return this.t<land;
+    },drw(){}});
+  }
   if(id==='princess'){G.hp=Math.min(G.maxHp,G.hp+25);ov({upd(dt){this.t+=dt;const n=14,R=150;this.p=[];for(let i=0;i<n;i++){const a=this.t*2.4+i*Math.PI*2/n,rr=R*(.8+.2*Math.sin(this.t*3+i)),px=G.x+Math.cos(a)*rr,py=heroCY()+Math.sin(a)*rr*.75;this.p.push([px,py,a]);
         for(const f of G.foes){if(f.dead||f.petCD>performance.now())continue;if(Math.hypot(f.x-px,foeCY(f)-py)<f.r+14){f.petCD=performance.now()+400;hurtFoe(f,14*m,Math.cos(a)*90,Math.sin(a)*90)}}}return this.t<6},
       drw(sx,sy){for(const[px,py,a]of this.p||[]){glyph('petal',sx(px),sy(py),9*U,a*2,1,'#f7a8c8');glyph('petal',sx(px)-Math.cos(a)*14*U,sy(py)-Math.sin(a)*10*U,6*U,a*2,.5,'#ffd6e6')}
@@ -4100,10 +4143,11 @@ let FR_LAST=0;function frame(pn){
     if(kind===4){f.ys(sx,sy,pn);continue}
     if(kind===1){const x=hSX,y=hSY,sc=U*HS,red=Math.max(0,1-(pn-G.hitT)/350)+(G.hp<G.maxHp*.25?.15:0);
       ctx.fillStyle='rgba(0,0,0,.35)';ctx.beginPath();ctx.ellipse(x,y,17*U,5.5*U,0,0,7);ctx.fill();
+      const beatBurst=G.spEnts?.find(e=>e.k==='beatBurst');
       let a='idle',fi=Math.floor(pn/250);
-      if(G.atkAnim){const an=skA(G.atkAnim.a),A=SPR[G.skin].anims[an];let i=99;if(A){if(A.d){/* 1.9.1.0 프레임별 시간(d, ms)·재생 속도(sp)·구간(from~to) 지원 */let el=(pn-G.atkAnim.t0)*(G.atkAnim.sp||1),k=G.atkAnim.from||0;const to=G.atkAnim.to||A.f.length;while(k<to&&el>=A.d[k]){el-=A.d[k];k++}if(k<to)i=k}else i=Math.floor((pn-G.atkAnim.t0)/1000*A.fps*1.8)}if(A&&i<A.f.length&&(!G.moving||G.heroId==='gahee'||G.heroId==='yuenem'||G.heroId==='damiroK'||G.heroId==='marjanao'||G.heroId==='violetB'||G.heroId==='nid')){a=an;fi=i}/* 1.9.0.1 가희는 움직이면서도 베는 동작 */else G.atkAnim=null}
+      if(G.atkAnim){const an=skA(G.atkAnim.a),A=SPR[G.skin].anims[an];let i=99;if(A){if(A.d){/* 1.9.1.0 프레임별 시간(d, ms)·재생 속도(sp)·구간(from~to) 지원 */let el=(pn-G.atkAnim.t0)*(G.atkAnim.sp||1),k=G.atkAnim.from||0;const to=G.atkAnim.to||A.f.length;while(k<to&&el>=A.d[k]){el-=A.d[k];k++}if(k<to)i=k}else i=Math.floor((pn-G.atkAnim.t0)/1000*A.fps*1.8)}if(A&&i<A.f.length&&(!G.moving||beatBurst||G.heroId==='gahee'||G.heroId==='yuenem'||G.heroId==='damiroK'||G.heroId==='marjanao'||G.heroId==='violetB'||G.heroId==='nid')){a=an;fi=i}/* 1.9.0.1 가희는 움직이면서도 베는 동작 */else G.atkAnim=null}
       if(a==='idle'&&G.moving){a='run';fi=Math.floor(G.runT*11)}
-      let jy=0;if(G.jump){const p=Math.min(1,G.jump.t/G.jump.T);jy=-Math.sin(p*Math.PI)*170*U;a=skA('bunny_spin');fi=Math.floor(p*8)}
+      let jy=-(beatBurst?.lift||0)*U;if(G.jump){const p=Math.min(1,G.jump.t/G.jump.T);jy=-Math.sin(p*Math.PI)*170*U;a=skA('bunny_spin');fi=Math.floor(p*8)}
       drawSpr(G.skin,a,fi,x,y+jy,sc,G.face,{red,alpha:G.iT>0&&!G.jump&&!G.spEnts&&Math.floor(pn/60)%2?.55:1});/* 1.9.7.0 필살기 연출 중엔 깜빡이지 않음(이펙트에 묻히지 않게) */
       {/* 1.13.16.19 캐릭터 발밑 작은 체력바 — 눈을 캐릭터에 둔 채로도 체력이 보이게 *//* 1.14.0.1 더 얇게 + 아래에 필살기 게이지 */const r=Math.max(0,Math.min(1,G.hp/G.maxHp)),q=Math.min(1,G.sp/100),bw=44*U,bh=Math.max(3,3.6*U),sh2=Math.max(2,2.4*U),bx=x-bw/2,by=y+10*U;ctx.fillStyle='rgba(8,6,14,.72)';ctx.fillRect(bx-1,by-1,bw+2,bh+sh2+3);ctx.fillStyle=r<.25?(Math.floor(pn/180)%2?'#ff3b3b':'#ff8a8a'):r<.5?'#ffbf2f':'#3ddc6e';ctx.fillRect(bx,by,bw*r,bh);ctx.fillStyle=q>=1?(Math.floor(pn/160)%2?'#fff4c2':'#ffd76a'):'#b48cff';ctx.fillRect(bx,by+bh+1,bw*q,sh2)}
       continue}
@@ -4681,7 +4725,7 @@ function showAch(){let d=$('achDlg');if(!d){d=document.createElement('dialog');d
   d.querySelector('#achOk').onclick=()=>d.close();const done=c=>{if(c)toast(`🪙 업적 보상 +${c.toLocaleString()} 코인`,1600);showAch()};d.querySelectorAll('.achget').forEach(b=>b.onclick=async()=>{b.disabled=true;done(await achClaim([b.dataset.id]))});const all=d.querySelector('#achAll');if(all)all.onclick=async()=>{all.disabled=true;done(await achClaim(RD.map(a=>a.id)))};d.querySelectorAll('.achtab').forEach(b=>b.onclick=()=>{ACHT=b.dataset.g;showAch()});if(!d.open)d.showModal?d.showModal():d.setAttribute('open','')}
 
 /* 1.13.11.0 일러스트 갤러리: 캐릭터 일러스트 · 필살기 컷인 · LD 전신을 코인으로 해금해서 크게 보기. 해금 기록은 SH.data.gal (계정, 로그인 필요) */
-/* 1.14.5.x 필살기 여러 컷은 갤러리 한 항목(fs)으로 합침 */const GAL=[{id:'il_aoko',n:'소나카',g:'일러스트',c:60,a:0,t:0,f:'assets/gallery/il_aoko.webp?v=2'},{id:'il_marjanam',n:'마르자나 · 현대판',g:'일러스트',c:60,a:0,t:1,f:'assets/gallery/il_marjanam.webp?v=3'},{id:'il_kate',n:'케이트호크',g:'일러스트',c:60,a:0,t:2},{id:'il_damiroK',n:'다미로 · 경화수월',g:'일러스트',c:60,a:0,t:3},{id:'il_damiroB',n:'다미로 · 비키니',g:'일러스트',c:60,a:0,t:4},{id:'il_violetB',n:'설순이 · 칵테일',g:'일러스트',c:60,a:0,t:5},{id:'il_violetB2',n:'설순이 · 바텐더 의자',g:'일러스트',c:60,a:0,t:6},{id:'il_violetB3',n:'설순이 · 바람 부는 해변',g:'일러스트',c:60,a:0,t:22},{id:'il_violetB4',n:'설순이 · 노을 한 모금',g:'일러스트',c:60,a:0,t:27},{id:'il_angel',n:'이드 · 천사악마 전신',g:'일러스트',c:60,a:0,t:35},{id:'il_nid',n:'설표 · 고양이 튜브',g:'일러스트',c:60,a:0,t:7},{id:'il_nid2',n:'설표 · 튜브 물장난',g:'일러스트',c:60,a:0,t:8},{id:'il_nid3',n:'설표 · 물보라',g:'일러스트',c:60,a:0,t:9},{id:'il_nid4',n:'설표 · 물총',g:'일러스트',c:60,a:0,t:10},{id:'ct_nid',n:'설표 · 눈송이 발차기',g:'필살기 컷인',c:30,a:0,t:11,f:'assets/sprites/cut_nid2.webp'},{id:'ct_princess',n:'소나카 · 꽃의 정원',g:'필살기 컷인',c:30,a:0,t:12,f:'assets/sprites/cut_princess.webp'},{id:'ct_marjanam',n:'마르자나 · 천지파열무',g:'필살기 컷인',c:30,a:0,t:13,f:'assets/sprites/cut_marjanam.webp?v=4'},{id:'ct_violetB',n:'설순이 · 칵테일 2컷',g:'필살기 컷인',c:40,a:0,t:14,fs:['assets/sprites/cut_violetB1.webp','assets/sprites/cut_violetB2.webp']},{id:'ct_elf',n:'레이나 · 질풍 연참',g:'필살기 컷인',c:30,a:1,t:29,f:'assets/sprites/cut_elf.webp'},{id:'ct_knight',n:'세레나 · 루나 슬래시',g:'필살기 컷인',c:30,a:1,t:28,f:'assets/sprites/cut_knight.webp'},{id:'ct_lion',n:'레오나 · 사자 포효',g:'필살기 컷인',c:30,a:1,t:31,f:'assets/sprites/cut_lion.webp'},{id:'ct_damiro',n:'다미로 · 하트 스핀',g:'필살기 컷인',c:30,a:1,t:32,f:'assets/sprites/cut_damiro.webp'},{id:'ct_nidB',n:'설표 · 비키니 3컷',g:'필살기 컷인',c:40,a:1,t:37},{id:'ct_elf2',n:'레이나 · 질풍 연참 (움직이는 컷인)',g:'필살기 컷인',c:40,a:0,t:36},{id:'ct_kate',n:'케이트호크 · 크림슨 크로스',g:'필살기 컷인',c:30,a:1,t:33,f:'assets/sprites/cut_kate.webp?v=4'},{id:'ct_marjanao',n:'마르자나 · 혈랑마혼',g:'필살기 컷인',c:30,a:1,t:34,f:'assets/sprites/cut_marjanao.webp?v=3'},{id:'ct_yuenem',n:'유에넴 · 매화신권 2컷',g:'필살기 컷인',c:40,a:0,t:40,fs:['assets/sprites/cut_yuenem1.webp?v=2','assets/sprites/cut_yuenem2.webp?v=2']},{id:'ct_ribbon',n:'딘코 · 레드 러시 2컷',g:'필살기 컷인',c:40,a:0,t:41,fs:['assets/sprites/cut_ribbon1.webp','assets/sprites/cut_ribbon2.webp']},{id:'ld_gahee',n:'가희 · 사파',g:'LD 전신',c:40,a:0,t:16},{id:'ld_knight',n:'세레나',g:'LD 전신',c:40,a:0,t:18},{id:'ld_elf',n:'레이나',g:'LD 전신',c:40,a:0,t:19},{id:'ld_yuenem',n:'유에넴',g:'LD 전신',c:40,a:0,t:20},{id:'ld_idtrip',n:'이드 · 여행원피스',g:'LD 전신',c:40,a:1,t:21},{id:'ld_nobu',n:'노브냥이 · 서큐버스',g:'LD 전신',c:40,a:1,t:23},{id:'ld_nobu2',n:'노브냥이 · 서큐버스 2',g:'LD 전신',c:40,a:0,t:24},{id:'ld_nobuR',n:'노브냥이 · 루비 드레스',g:'LD 전신',c:40,a:1,t:25},{id:'ld_santa',n:'마르자나 · 산타',g:'LD 전신',c:40,a:0,t:26},{id:'il_gahee2',n:'가희 · 백의 도객',g:'일러스트',c:60,a:0,t:17,ps:'assets/gallery/pack_1116.webp',pk:[0,0,1024,1536]},{id:'il_gahee3',n:'가희 · 사파 전투',g:'일러스트',c:60,a:0,t:39,ps:'assets/gallery/pack_1116.webp',pk:[0,2477,1671,941]},{id:'il_gahee4',n:'가희 · 유에넴과 대결',g:'일러스트',c:60,a:0,t:38,ps:'assets/gallery/pack_1116.webp',pk:[0,1536,1672,941]},{id:'il_yuenem',n:'유에넴 · 부채무공',g:'일러스트',c:60,a:0,t:30,ps:'assets/gallery/pack_1116.webp',pk:[1024,0,1024,1536]}]/* 1.13.16.13 새 일러스트 4장은 아티팩트 파일 수 한도(511) 때문에 한 장(pack_1116)에 모아 두고 볼 때 잘라서 보여 줌(pk=[x,y,w,h]) */,PKC={},pkSrc=(it,cb)=>{if(PKC[it.id])return cb(PKC[it.id]);const im=new Image();im.onload=()=>{const[x,y,w,h]=it.pk,c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(im,x,y,w,h,0,0,w,h);const done=u=>{PKC[it.id]=u;cb(u)};if(c.toBlob)c.toBlob(b=>done(b?URL.createObjectURL(b):c.toDataURL('image/jpeg',.92)),'image/webp',.92);else done(c.toDataURL('image/jpeg',.92))};im.src=it.ps},GALG=['일러스트','필살기 컷인','LD 전신'],GALI={'일러스트':'🎨','필살기 컷인':'🎬','LD 전신':'🧍'};
+/* 1.14.5.x 필살기 여러 컷은 갤러리 한 항목(fs)으로 합침 */const GAL=[{id:'il_aoko',n:'소나카',g:'일러스트',c:60,a:0,t:0,f:'assets/gallery/il_aoko.webp?v=2'},{id:'il_marjanam',n:'마르자나 · 현대판',g:'일러스트',c:60,a:0,t:1,f:'assets/gallery/il_marjanam.webp?v=3'},{id:'il_kate',n:'케이트호크',g:'일러스트',c:60,a:0,t:2},{id:'il_damiroK',n:'다미로 · 경화수월',g:'일러스트',c:60,a:0,t:3},{id:'il_damiroB',n:'다미로 · 비키니',g:'일러스트',c:60,a:0,t:4},{id:'il_violetB',n:'설순이 · 칵테일',g:'일러스트',c:60,a:0,t:5},{id:'il_violetB2',n:'설순이 · 바텐더 의자',g:'일러스트',c:60,a:0,t:6},{id:'il_violetB3',n:'설순이 · 바람 부는 해변',g:'일러스트',c:60,a:0,t:22},{id:'il_violetB4',n:'설순이 · 노을 한 모금',g:'일러스트',c:60,a:0,t:27},{id:'il_angel',n:'이드 · 천사악마 전신',g:'일러스트',c:60,a:0,t:35},{id:'il_nid',n:'설표 · 고양이 튜브',g:'일러스트',c:60,a:0,t:7},{id:'il_nid2',n:'설표 · 튜브 물장난',g:'일러스트',c:60,a:0,t:8},{id:'il_nid3',n:'설표 · 물보라',g:'일러스트',c:60,a:0,t:9},{id:'il_nid4',n:'설표 · 물총',g:'일러스트',c:60,a:0,t:10},{id:'ct_nid',n:'설표 · 눈송이 발차기',g:'필살기 컷인',c:30,a:0,t:11,f:'assets/sprites/cut_nid2.webp'},{id:'ct_princess',n:'소나카 · 꽃의 정원',g:'필살기 컷인',c:30,a:0,t:12,f:'assets/sprites/cut_princess.webp'},{id:'ct_marjanam',n:'마르자나 · 천지파열무',g:'필살기 컷인',c:30,a:0,t:13,f:'assets/sprites/cut_marjanam.webp?v=4'},{id:'ct_violetB',n:'설순이 · 칵테일 2컷',g:'필살기 컷인',c:40,a:0,t:14,fs:['assets/sprites/cut_violetB1.webp','assets/sprites/cut_violetB2.webp']},{id:'ct_elf',n:'레이나 · 질풍 연참',g:'필살기 컷인',c:30,a:1,t:29,f:'assets/sprites/cut_elf.webp'},{id:'ct_knight',n:'세레나 · 루나 슬래시',g:'필살기 컷인',c:30,a:1,t:28,f:'assets/sprites/cut_knight.webp'},{id:'ct_lion',n:'레오나 · 사자 포효',g:'필살기 컷인',c:30,a:1,t:31,f:'assets/sprites/cut_lion.webp'},{id:'ct_damiro',n:'다미로 · 하트 스핀',g:'필살기 컷인',c:30,a:1,t:32,f:'assets/sprites/cut_damiro.webp'},{id:'ct_nidB',n:'설표 · 비키니 3컷',g:'필살기 컷인',c:40,a:1,t:37},{id:'ct_elf2',n:'레이나 · 질풍 연참 (움직이는 컷인)',g:'필살기 컷인',c:40,a:0,t:36},{id:'ct_kate',n:'케이트호크 · 크림슨 크로스',g:'필살기 컷인',c:30,a:1,t:33,f:'assets/sprites/cut_kate.webp?v=4'},{id:'ct_marjanao',n:'마르자나 · 혈랑마혼',g:'필살기 컷인',c:30,a:1,t:34,f:'assets/sprites/cut_marjanao.webp?v=3'},{id:'ct_yuenem',n:'유에넴 · 매화신권 2컷',g:'필살기 컷인',c:40,a:0,t:40,fs:['assets/sprites/cut_yuenem1.webp?v=2','assets/sprites/cut_yuenem2.webp?v=2']},{id:'ct_ribbon',n:'딘코 · 비트 버스트 2컷',g:'필살기 컷인',c:40,a:0,t:41,fs:['assets/sprites/cut_ribbon1.webp','assets/sprites/cut_ribbon2.webp']},{id:'ld_gahee',n:'가희 · 사파',g:'LD 전신',c:40,a:0,t:16},{id:'ld_knight',n:'세레나',g:'LD 전신',c:40,a:0,t:18},{id:'ld_elf',n:'레이나',g:'LD 전신',c:40,a:0,t:19},{id:'ld_yuenem',n:'유에넴',g:'LD 전신',c:40,a:0,t:20},{id:'ld_idtrip',n:'이드 · 여행원피스',g:'LD 전신',c:40,a:1,t:21},{id:'ld_nobu',n:'노브냥이 · 서큐버스',g:'LD 전신',c:40,a:1,t:23},{id:'ld_nobu2',n:'노브냥이 · 서큐버스 2',g:'LD 전신',c:40,a:0,t:24},{id:'ld_nobuR',n:'노브냥이 · 루비 드레스',g:'LD 전신',c:40,a:1,t:25},{id:'ld_santa',n:'마르자나 · 산타',g:'LD 전신',c:40,a:0,t:26},{id:'il_gahee2',n:'가희 · 백의 도객',g:'일러스트',c:60,a:0,t:17,ps:'assets/gallery/pack_1116.webp',pk:[0,0,1024,1536]},{id:'il_gahee3',n:'가희 · 사파 전투',g:'일러스트',c:60,a:0,t:39,ps:'assets/gallery/pack_1116.webp',pk:[0,2477,1671,941]},{id:'il_gahee4',n:'가희 · 유에넴과 대결',g:'일러스트',c:60,a:0,t:38,ps:'assets/gallery/pack_1116.webp',pk:[0,1536,1672,941]},{id:'il_yuenem',n:'유에넴 · 부채무공',g:'일러스트',c:60,a:0,t:30,ps:'assets/gallery/pack_1116.webp',pk:[1024,0,1024,1536]}]/* 1.13.16.13 새 일러스트 4장은 아티팩트 파일 수 한도(511) 때문에 한 장(pack_1116)에 모아 두고 볼 때 잘라서 보여 줌(pk=[x,y,w,h]) */,PKC={},pkSrc=(it,cb)=>{if(PKC[it.id])return cb(PKC[it.id]);const im=new Image();im.onload=()=>{const[x,y,w,h]=it.pk,c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(im,x,y,w,h,0,0,w,h);const done=u=>{PKC[it.id]=u;cb(u)};if(c.toBlob)c.toBlob(b=>done(b?URL.createObjectURL(b):c.toDataURL('image/jpeg',.92)),'image/webp',.92);else done(c.toDataURL('image/jpeg',.92))};im.src=it.ps},GALG=['일러스트','필살기 컷인','LD 전신'],GALI={'일러스트':'🎨','필살기 컷인':'🎬','LD 전신':'🧍'};
 const GALALIAS={ct_violetB:['ct_violetB1','ct_violetB2']}; const galOwn=id=>{const gal=SH.data&&SH.data.gal;return AU.on&&!!(gal&&(gal[id]||GALALIAS[id]?.some(old=>gal[old])))};
 async function galBuy(it){if(!AU.on)return 'login';if(!AU.ok)return 'wait';SH.load();if(galOwn(it.id))return 'have';if(AU.coins()<it.c)return 'poor';await AU.addCoins(-it.c);SH.data.gal=SH.data.gal||{};SH.data.gal[it.id]=1;SH.save();return 'ok'}
 function galView(i){const L=galOrd().filter(x=>galOwn(x.id));let k=Math.max(0,L.findIndex(x=>x.id===i));let v=$('galView');if(!v){v=document.createElement('div');v.id='galView';v.className='galview';const dd=$('galDlg');(dd&&dd.open?dd:document.body).appendChild(v)/* 모달 창 위(top layer)에 보이게 창 안에 붙임 */}
@@ -4703,7 +4747,7 @@ function showGal(){let d=$('galDlg');if(!d){d=document.createElement('dialog');d
 (function(){const row=document.querySelector('.topbtns');if(!row)return;const gb=document.createElement('button');gb.type='button';gb.id='galBtn';gb.className='notesbtn';gb.textContent='🖼️ 일러스트';gb.onclick=()=>showGal();row.append(gb)})();
 (function(){const row=document.querySelector('.topbtns');if(!row)return;const ab=document.createElement('button');ab.type='button';ab.id='achBtn';ab.className='notesbtn';ab.textContent='🏆 업적';ab.onclick=()=>showAch();row.append(ab);achBadge();setInterval(()=>{const o=$('titleOv');if(!document.hidden&&o&&!o.hidden)achBadge()},4000)/* 게임 중엔 안 돎 */})();
 /* 1.13.16.5 새 버전 알림: GitHub 페이지에서만, 작은 version.json을 3분마다(그리고 탭으로 돌아올 때) 확인해 이 화면보다 새 빌드가 있으면 처음 화면에 「새로고침」 띠를 띄움. 게임 중엔 안 띄우고 처음 화면으로 돌아오면 보여 줌 */
-const BUILD='20261120154529';
+const BUILD='20261120160752';
 /* 1.13.16.15 앱(PWA) · 1.13.16.16 버튼 항상 보이게: GitHub 주소면 서비스워커 등록 + 「📲 앱으로 설치」(크롬은 설치 창, 없으면 메뉴 안내, 아이폰은 Safari 공유 → 홈 화면에 추가 안내).
    카카오톡·네이버 등 앱 안 브라우저면 크롬(외부 브라우저)으로 열어 줌. Claude 페이지 등 다른 주소면 GitHub 주소를 새 창으로 열어 줌. 이미 앱으로 열었으면 버튼 없음 */
 (function(){const GH='https://vnfms3346-alt.github.io/beatblade/';const onGH=/github\.io$/.test(location.hostname);
