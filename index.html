@@ -4654,7 +4654,7 @@ function advanceCut(c,dt,pn){
   const time=v&&c.videoStarted?v.currentTime:0;
   if(time>c.t){c.t=Math.min(time,g.T);c.videoProgressAt=pn;return}
   c.videoProgressAt??=pn;
-  if(!v||v.error||v.ended||pn-c.videoProgressAt>=1500){c.videoFallback=true;c.t+=dt}
+  if(!v||v.error||(c.videoStarted&&v.ended)||pn-c.videoProgressAt>=1500)/* 1.14.6.22 두 번째 필살기부터: 지난번에 끝난 영상(ended)을 되감기 전에 실패로 보지 않음 */{c.videoFallback=true;c.t+=dt}
 }
 function clearCut(){
   syncCutVideo(false,0);if(G){G.cut=null;G.spRun=null}
@@ -4664,11 +4664,11 @@ function drawCutGif(c,t){const g=CUTGIF[c.gif],col=HC[c.id]||'#ffffff',k=H/540,c
   const nameAt=(x,y,fs,al,rot)=>{ctx.save();ctx.translate(x,y);ctx.rotate(rot);ctx.globalAlpha=al;ctx.textAlign='center';ctx.textBaseline='middle';ctx.font=`800 ${fs}px ${FD}`;ctx.lineJoin='round';ctx.lineWidth=fs*.22;ctx.strokeStyle='rgba(6,6,12,.92)';ctx.strokeText(c.name,0,0);ctx.lineWidth=fs*.09;ctx.strokeStyle=rgba(col,.95);ctx.strokeText(c.name,0,0);ctx.fillStyle='#ffffff';ctx.fillText(c.name,0,0);if(g.en){/* 1.13.16.14 영문 기술명(세레나 LUNAR SLASH) — 이름 위에 은빛 자간 넓게 */ctx.save();ctx.font=`900 ${Math.round(fs*.42)}px ${FD}`;try{ctx.letterSpacing=Math.round(fs*.12)+'px'}catch(_){}ctx.lineWidth=fs*.09;ctx.strokeStyle='rgba(6,6,12,.9)';ctx.strokeText(g.en,0,-fs*.78);ctx.fillStyle='#d8e6ff';ctx.fillText(g.en,0,-fs*.78);ctx.restore()}ctx.font=`800 ${Math.round(fs*.38)}px ${FN}`;ctx.lineWidth=fs*.16;ctx.strokeStyle='rgba(6,6,12,.95)';ctx.strokeText(RN(c.id)+'  ·  필살기',0,fs*.86);ctx.fillStyle='#fff4d6';ctx.fillText(RN(c.id)+'  ·  필살기',0,fs*.86);/* 1.14.6.5 잘 보이게: 크게·굵게·검은 테두리 */ctx.restore();ctx.globalAlpha=1};
   const flash=a=>{if(a>0){ctx.fillStyle=`rgba(255,250,235,${a})`;ctx.fillRect(0,0,W,H)}};
   if(g.mode==='vid'){/* 1.13.16.8 영상 필살기 컷인(다미로 경화수월 · 세레나). 영상은 미리 속도를 당기고 늦춰 박자감 있게 편집(전반은 빠르게, 칼을 뽑고 빛이 터지는 순간은 천천히). 화면 위 효과는 영상 시간표에 맞춤: beats=두근(확대·흔들림·번쩍임·집중선), burst=빛 폭발(색 섬광·충격파·빛줄기), 끝나면 살짝 커지며 사라짐 */
-    const v=cgV(g.v,2),T=g.T,c2=g.c2||col,tIn=cl(t/.16,0,1),tOut=cl((t-T)/.2,0,1),bk=x=>{const c1=1.70158,c3=c1+1;return 1+c3*Math.pow(x-1,3)+c1*Math.pow(x-1,2)};
+    const v=cgV(g.v,2),T=g.T,vOk=v&&(c.videoFallback||c.videoStarted&&!v.seeking&&!(v.ended&&t<T-.2))/* 1.14.6.22 되감기 전·중의 지난 영상 마지막 장면은 안 그림 */,c2=g.c2||col,tIn=cl(t/.16,0,1),tOut=cl((t-T)/.2,0,1),bk=x=>{const c1=1.70158,c3=c1+1;return 1+c3*Math.pow(x-1,3)+c1*Math.pow(x-1,2)};
     if(g.full&&v){
       const pw=Math.min(W,H*v.videoWidth/v.videoHeight),ph=pw*v.videoHeight/v.videoWidth;
       ctx.save();ctx.globalAlpha=1-tOut;ctx.fillStyle='#05070d';ctx.fillRect(0,0,W,H);
-      ctx.drawImage(v,(W-pw)/2,(H-ph)/2,pw,ph);ctx.restore();
+      if(vOk)ctx.drawImage(v,(W-pw)/2,(H-ph)/2,pw,ph);ctx.restore();
       const beat=Math.max(...g.beats.map(b=>t>=b?Math.max(0,1-(t-b)/.1):0));
       const burst=t>=g.burst?Math.max(0,1-(t-g.burst)/.16):0;
       flash((1-tOut)*Math.max(.12*beat,.2*burst));
@@ -4683,7 +4683,7 @@ function drawCutGif(c,t){const g=CUTGIF[c.gif],col=HC[c.id]||'#ffffff',k=H/540,c
     if(!LOWFX&&t<T){const n=34,ph0=Math.floor(t/.06);ctx.save();ctx.globalCompositeOperation='lighter';for(let i=0;i<n;i++){const a=i/n*Math.PI*2+((i*7+ph0*3)%11)*.02,r0=Math.max(W,H)*(.28+((i*13+ph0)%7)*.02),r1=Math.max(W,H)*.9,w=(2+((i*5)%4))*k;ctx.strokeStyle=rgba(i%3?c2:col,(.1+.28*pulse+.35*bE)*tIn*(1-tOut));ctx.lineWidth=w;ctx.beginPath();ctx.moveTo(W/2+Math.cos(a)*r0,H/2+Math.sin(a)*r0);ctx.lineTo(W/2+Math.cos(a)*r1,H/2+Math.sin(a)*r1);ctx.stroke()}ctx.restore()}
     ctx.save();ctx.globalAlpha=1-tOut;ctx.translate(cx,cy);ctx.rotate((1-tIn)*-.06);ctx.scale(sc,sc);
     ctx.shadowColor=rgba(c2,.9);ctx.shadowBlur=(26+40*pulse+60*bE)*k;ctx.fillStyle='#0a0c16';ctx.fillRect(-pw/2,-ph/2,pw,ph);ctx.shadowBlur=0;
-    if(v)ctx.drawImage(v,-pw/2,-ph/2,pw,ph);
+    if(vOk)ctx.drawImage(v,-pw/2,-ph/2,pw,ph);
     /* 영상 위: 박자마다 테두리 안쪽이 빛남 + 빛 폭발 때 색이 덮임 */
     if(pulse>0){const gr=ctx.createRadialGradient(0,0,ph*.25,0,0,ph*.75);gr.addColorStop(0,'rgba(255,255,255,0)');gr.addColorStop(1,rgba(c2,.45*pulse));ctx.fillStyle=gr;ctx.fillRect(-pw/2,-ph/2,pw,ph)}
     if(bE>0){ctx.globalCompositeOperation='lighter';const X=(g.bx-.5)*pw,Y=(g.by-.5)*ph,gr=ctx.createRadialGradient(X,Y,0,X,Y,ph*.9);gr.addColorStop(0,`rgba(255,255,255,${.75*bE})`);gr.addColorStop(.35,rgba(c2,.5*bE));gr.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=gr;ctx.fillRect(-pw/2,-ph/2,pw,ph);ctx.globalCompositeOperation='source-over'}
@@ -5628,7 +5628,7 @@ function showGal(){let d=$('galDlg');if(!d){d=document.createElement('dialog');d
 (function(){const row=document.querySelector('.topbtns');if(!row)return;const gb=document.createElement('button');gb.type='button';gb.id='galBtn';gb.className='notesbtn';gb.textContent='🖼️ 일러스트';gb.onclick=()=>showGal();row.append(gb)})();
 (function(){const row=document.querySelector('.topbtns');if(!row)return;const ab=document.createElement('button');ab.type='button';ab.id='achBtn';ab.className='notesbtn';ab.textContent='🏆 업적';ab.onclick=()=>showAch();row.append(ab);achBadge();setInterval(()=>{const o=$('titleOv');if(!document.hidden&&o&&!o.hidden)achBadge()},4000)/* 게임 중엔 안 돎 */})();
 /* 1.13.16.5 새 버전 알림: GitHub 페이지에서만, 작은 version.json을 3분마다(그리고 탭으로 돌아올 때) 확인해 이 화면보다 새 빌드가 있으면 처음 화면에 「새로고침」 띠를 띄움. 게임 중엔 안 띄우고 처음 화면으로 돌아오면 보여 줌 */
-const BUILD='20261122195451';
+const BUILD='20261122210222';
 /* 1.13.16.15 앱(PWA) · 1.13.16.16 버튼 항상 보이게: GitHub 주소면 서비스워커 등록 + 「📲 앱으로 설치」(크롬은 설치 창, 없으면 메뉴 안내, 아이폰은 Safari 공유 → 홈 화면에 추가 안내).
    카카오톡·네이버 등 앱 안 브라우저면 크롬(외부 브라우저)으로 열어 줌. Claude 페이지 등 다른 주소면 GitHub 주소를 새 창으로 열어 줌. 이미 앱으로 열었으면 버튼 없음 */
 (function(){const GH='https://vnfms3346-alt.github.io/beatblade/';const onGH=/github\.io$/.test(location.hostname);
