@@ -713,11 +713,11 @@ window.SPLASH_DONE=new Promise(res=>{const sp=document.getElementById('splash');
   img.addEventListener(vid?'loadedmetadata':'load',measure);addEventListener('resize',measure);
   if(vid){
     const key='beatblade-last-opening';
-    let opening=7;/* 1.14.6.15 가희 오프닝: 봄→겨울→얼굴 5컷→겨울→대일섬→밝아짐 */ /* 1.14.6.9 가희 현대판 오프닝만 (5번 전투 오프닝은 사용자 요청으로 뺌) */
+    let opening=8;/* 1.14.6.23 오프닝7과 같은 구성, 봄·겨울 원화만 내그림체판(공지 폴더)으로 *//* 1.14.6.15 가희 오프닝: 봄→겨울→얼굴 5컷→겨울→대일섬→밝아짐 */ /* 1.14.6.9 가희 현대판 오프닝만 (5번 전투 오프닝은 사용자 요청으로 뺌) */
     try{localStorage.setItem(key,String(opening))}catch(_){}
     const poster='assets/opening_first'+opening+'.webp?v='+(opening==6?3:1);/* 1.14.6.8 첫 화면 그림도 버전 번호(예전 그림이 저장본에서 나오지 않게) */
-    if(opening===6||opening===7){
-      sp.style.setProperty('--sp-focus',opening===7?'72%':'58%');
+    if(opening===6||opening===7||opening===8){
+      sp.style.setProperty('--sp-focus',opening>=7?'72%':'58%');
       sp.style.setProperty('--sp-focus-phone','76%');
     }
     sp.style.setProperty('--sp-poster',"url('"+poster+"')");
@@ -4403,6 +4403,7 @@ buildPicks(id=>{const k=KIT(id),w=WEAP[HERO[k][0]];/* 1.9.6.0 카드엔 무기 �
 /* ---------- update notes popup ---------- */
 const NOTES_VER='2026-11-23-우화설참';
 const NOTES=[
+  ["11월 23일","1.14.6.23","오프닝 그림 다듬기",["🎬 가희 · 현대판 오프닝의 봄비·눈 거리 장면을 새 그림체로"]],
   ["11월 22일","1.14.6.22","새 보스 · 가희 현대판 · 편의 기능",["🗡️ 가희 · 현대판 필살기 이름 「우화설참 · RAIN TO SNOW」로 바뀜","👹 새 보스 「심연 뿔 군주」 · 새 엘리트 「두얼굴 그림자」 · 새 필드 몬스터 5종","🗡️ 가희 · 현대판 새 오프닝 · 우화설참 새 컷인과 방향 조준 · 동작 다듬기","🖼️ 일러스트 창 새 단장 · ✨ 스킬 아이콘 종류별 색 · ⏸️ 일시정지 스킬 설명","🥁 천둥 북·동탄미시 커피 웅덩이가 캐릭터를 가리지 않게 · ⏻ 게임 종료 다듬기","🔧 코인 사라짐 등 버그 수정"]],
   ["11월 21일","1.14.6.7","새 캐릭터 가희 · 현대판",["🗡️ 새 캐릭터 가희 · 현대판 (필살기 「우화설참」)","🎯 보스 공격 예고·피격 범위를 더 정확하게","⏩ 시작 크레딧·오프닝 빠르게","📱 폰 화면과 터치 안내 다듬기","🔧 필살기 컷인 중 탄이 사라지던 문제 등 버그 수정"]],
   ["11월 19일","1.14.5.4","폰 조작 · 스킬 조정 · 새 컷인",["📱 게임 중 뒤로가기를 누르면 일시정지 · 게임 종료 버튼 추가","⚡ 저화질에서 배경과 공격 효과를 가볍게","🔑 새 비밀번호는 숫자 6자리 이상 · 🏆 15분을 넘긴 일반 모드 기록도 랭킹에 등록","🖼️ 소나카 대표 그림 교체 · 유에넴 「매화신권」 2컷 추가","🔧 캐릭터 공격력·회복 조정과 스킬 버그 수정"]],
@@ -4426,7 +4427,7 @@ function showNotes(){let d=document.getElementById('notesDlg');if(!d){d=document
     d.innerHTML=`<div class="nbody">${NOTES_HTML}</div><div class="nbtns"><button type="button" class="btn" id="notesOk">확인</button></div>`;document.body.appendChild(d);
     const close=()=>{try{localStorage.setItem('bb_notes_seen',NOTES_VER)}catch(e){}d.close()};d.querySelector('#notesOk').onclick=close;d.addEventListener('cancel',()=>{try{localStorage.setItem('bb_notes_seen',NOTES_VER)}catch(e){}});d.addEventListener('click',e=>{if(e.target===d)close()})}
   if(!d.open){if(d.showModal)d.showModal();else d.setAttribute('open','')}d.querySelector('#notesOk').focus()}
-(function(){const st=document.getElementById('settings');if(st&&!document.getElementById('notesBtn')){const b=document.createElement('button');b.type='button';b.id='notesBtn';b.className='notesbtn';b.textContent='업데이트 소식 · v1.14.6.22';b.onclick=showNotes;st.insertAdjacentElement('afterend',b)}
+(function(){const st=document.getElementById('settings');if(st&&!document.getElementById('notesBtn')){const b=document.createElement('button');b.type='button';b.id='notesBtn';b.className='notesbtn';b.textContent='업데이트 소식 · v1.14.6.23';b.onclick=showNotes;st.insertAdjacentElement('afterend',b)}
   let seen='';try{seen=localStorage.getItem('bb_notes_seen')||''}catch(e){}if(!seen){try{localStorage.setItem('bb_notes_seen',NOTES_VER)}catch(e){}}else if(seen!==NOTES_VER)SPLASH_DONE.then(()=>setTimeout(showNotes,300))})();
 var PICK_SEL=null;/* var: buildPicks 가 이 줄보다 먼저 불려도 오류 없게 */
 function roPart(s){if(!s)return'(으)로';const c=s.charCodeAt(s.length-1);if(c>=0xAC00&&c<=0xD7A3){const j=(c-0xAC00)%28;return(j===0||j===8)?'로':'으로'}return'(으)로'}
@@ -5663,7 +5664,7 @@ function showGal(){let d=$('galDlg');if(!d){d=document.createElement('dialog');d
 (function(){const row=document.querySelector('.topbtns');if(!row)return;const gb=document.createElement('button');gb.type='button';gb.id='galBtn';gb.className='notesbtn';gb.textContent='🖼️ 일러스트';gb.onclick=()=>showGal();row.append(gb)})();
 (function(){const row=document.querySelector('.topbtns');if(!row)return;const ab=document.createElement('button');ab.type='button';ab.id='achBtn';ab.className='notesbtn';ab.textContent='🏆 업적';ab.onclick=()=>showAch();row.append(ab);achBadge();setInterval(()=>{const o=$('titleOv');if(!document.hidden&&o&&!o.hidden)achBadge()},4000)/* 게임 중엔 안 돎 */})();
 /* 1.13.16.5 새 버전 알림: GitHub 페이지에서만, 작은 version.json을 3분마다(그리고 탭으로 돌아올 때) 확인해 이 화면보다 새 빌드가 있으면 처음 화면에 「새로고침」 띠를 띄움. 게임 중엔 안 띄우고 처음 화면으로 돌아오면 보여 줌 */
-const BUILD='20261123004409';
+const BUILD='20261123010751';
 /* 1.13.16.15 앱(PWA) · 1.13.16.16 버튼 항상 보이게: GitHub 주소면 서비스워커 등록 + 「📲 앱으로 설치」(크롬은 설치 창, 없으면 메뉴 안내, 아이폰은 Safari 공유 → 홈 화면에 추가 안내).
    카카오톡·네이버 등 앱 안 브라우저면 크롬(외부 브라우저)으로 열어 줌. Claude 페이지 등 다른 주소면 GitHub 주소를 새 창으로 열어 줌. 이미 앱으로 열었으면 버튼 없음 */
 (function(){const GH='https://vnfms3346-alt.github.io/beatblade/';const onGH=/github\.io$/.test(location.hostname);
