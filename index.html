@@ -113,6 +113,7 @@ h2{font-family:var(--f-display);font-weight:400;font-size:clamp(28px,6vw,40px);m
 @keyframes ptin{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
 .ptip .tt-h{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px;padding-bottom:7px;margin-bottom:7px;border-bottom:1px solid rgba(138,90,42,.25)}.ptip .tt-h b{font-size:16px}.ptip .tt-h em{font-style:normal;font-size:12px;color:#8a5a2a;background:rgba(201,112,30,.12);padding:1px 7px;border-radius:9px}.ptip .tt-h span{margin-left:auto;font-size:12px;color:#7a6650}
 .ptip .tt-r{display:grid;grid-template-columns:34px 1fr;gap:6px;margin-top:5px}.ptip .tt-r i{font-style:normal;font-size:11px;font-weight:700;color:#fff;background:#8a5a2a;border-radius:4px;text-align:center;height:18px;line-height:18px;margin-top:1px}.ptip .tt-r p{margin:0}.ptip .tt-r p b{color:#7a3a10}
+/* 1.14.7.0 설명창 방송 버튼 */ .ptip.chzzk{pointer-events:auto}.ptip .tt-channel{display:flex;align-items:center;justify-content:center;min-height:42px;box-sizing:border-box;margin-top:9px;text-decoration:none}
 .pick{display:grid;justify-items:center;gap:4px;padding:10px 10px 12px;background:var(--moss);border:1px solid var(--rule);color:var(--paper);font:inherit;cursor:pointer}
 .pick:hover,.pick:focus-visible{border-color:var(--ember);outline:none}
 .pick canvas{position:static;width:96px;height:115px}
@@ -1005,22 +1006,28 @@ function buildPicks(line,skip){const box=$('picks');box.innerHTML='';const gs=ro
     const[p,,n]=vs.children;p.onclick=e=>{e.stopPropagation();k=(k+ids.length-1)%ids.length;set()};n.onclick=e=>{e.stopPropagation();k=(k+1)%ids.length;set()}}
   else{vs=document.createElement('div');vs.className='vsel one';vs.innerHTML='<i></i>';card.appendChild(vs)}
   /* 1.9.6.0 특성 툴팁: 마우스를 올리거나 ⓘ를 누르면 */const ib=document.createElement('button');ib.type='button';ib.className='pinfo';ib.setAttribute('aria-label',nm+' 특성 보기');ib.textContent='i';card.appendChild(ib);
-  ib.onclick=e=>{e.stopPropagation();e.preventDefault();if(PTIP.el&&PTIP.on===card&&!PTIP.el.hidden)hideTip();else showTip(card,card.dataset.hid)};
-  if(PHOVER){card.addEventListener('mouseenter',()=>showTip(card,card.dataset.hid));card.addEventListener('mouseleave',hideTip)}b.addEventListener('focus',()=>showTip(card,card.dataset.hid));b.addEventListener('blur',hideTip);
+  ib.onclick=e=>{e.stopPropagation();e.preventDefault();if(PTIP.on===card&&PTIP.pinned)hideTip();else{showTip(card,card.dataset.hid,true);if(e.detail===0)PTIP.el?.querySelector('.tt-channel')?.focus()}};
+  /* 1.14.7.0 카드에서 방송 버튼으로 이동할 때 설명 유지 */
+  const preview=()=>{if(!PTIP.pinned)showTip(card,card.dataset.hid)};
+  if(PHOVER){card.addEventListener('mouseenter',preview);card.addEventListener('mouseleave',()=>leaveTip(card))}b.addEventListener('focus',preview);b.addEventListener('blur',e=>{if(!PTIP.el?.contains(e.relatedTarget))leaveTip(card)});
   set();box.appendChild(card)}}}
-const PHOVER=matchMedia('(hover:hover) and (pointer:fine)').matches,PTIP={el:null,on:null};
+const PHOVER=matchMedia('(hover:hover) and (pointer:fine)').matches,PTIP={el:null,on:null,pinned:false,timer:0};
+/* 1.14.7.0 이름별 치지직 채널 */
+const CHZZK={'루리아':'aac9c3eb8e66d3caf47924074386fdc5','다미로':'f9dd271948dafbee1318f9a70e8587fd','노브냥이':'4c069171a082b862987d508f9b2b3155','루비샘':'e6c1912127a136be2cbce1db7ef0a816','사우리스':'e561270da12df448ea379cac3cd0558f','설구리':'d1abed7a7a49bb786f9fc7408853ece4','언그할':'a755ce76160d35f891a9253824c349c4','이드':'f1ebe9926ce796b277677cfc40476071','김종현':'97fbcf6b57d14088bb42e4d22c43ea6b','윤설은':'ba604d373beea1c5db8b73bab20c2a33','청몽':'c7ab0e9beab536e520f313d58fda80fc','카밀레':'8ffc2d5a057faf65d8b844de6964132e'};
 function tipHtml(id){const k=KIT(id),h=HERO[k],w=WEAP[h[0]],sp=SPECIAL[k],r=ROSTER[id],esc=t=>String(t).replace(/</g,'&lt;'),cost=(typeof SHOP_CHAR!=='undefined'&&SHOP_CHAR[id]&&r.lock!==undefined)?SHOP_CHAR[id]:0;
   return `<div class="tt-h"><b>${esc(r.disp||r.name)}</b>${r.v?`<em>${esc(r.v)}</em>`:''}<span>❤ ${h[1]} · 👟 ${h[2]}</span></div>`+
    `<div class="tt-r"><i>특성</i><p>${esc(h[3])}</p></div>`+
    `<div class="tt-r"><i>무기</i><p><b>${w.ic||''} ${esc(w.name)}</b> — ${esc(w.desc(1))}</p></div>`+
-   `<div class="tt-r"><i>필살</i><p><b>${esc(sp.name)}</b> — ${esc(sp.desc)}</p></div>`}
-function showTip(card,id){if(id&&HERO[KIT(id)])showTipContent(card,tipHtml(id))}
+   `<div class="tt-r"><i>필살</i><p><b>${esc(sp.name)}</b> — ${esc(sp.desc)}</p></div>`+chzzkLink(r.name)}
+function chzzkLink(name){const ch=Object.hasOwn(CHZZK,name)?CHZZK[name]:'';return /^[0-9a-f]{32}$/.test(ch)?`<a class="btn tt-channel" href="https://chzzk.naver.com/${ch}" target="_blank" rel="noopener noreferrer">📺 치지직 방송 보러 가기</a>`:''}
+function showTip(card,id,pinned=false){if(id&&HERO[KIT(id)]){showTipContent(card,tipHtml(id));PTIP.pinned=pinned}}
+function leaveTip(card){if(PTIP.on!==card||PTIP.pinned)return;if(!PTIP.el.classList.contains('chzzk')){hideTip();return}clearTimeout(PTIP.timer);PTIP.timer=setTimeout(()=>{if(PTIP.on===card&&!PTIP.pinned&&!PTIP.el.contains(document.activeElement))hideTip()},220)}
 /* 1.14.6.19 보유 스킬도 캐릭터 카드와 같은 말풍선을 사용 */
 function showTipContent(card,html){let el=PTIP.el;if(!el){el=PTIP.el=document.createElement('div');el.className='ptip';el.setAttribute('role','tooltip');document.body.appendChild(el);document.addEventListener('pointerdown',e=>{if(!el.hidden&&!e.target.closest('.pinfo')&&!e.target.closest('.ptip')&&!(PTIP.on?.dataset.skill&&PTIP.on.contains(e.target)))hideTip()},true);addEventListener('scroll',()=>{if(!el.hidden&&!PHOVER)hideTip()},true)}
-  el.innerHTML=html;el.hidden=false;PTIP.on=card;const r=card.getBoundingClientRect(),tw=Math.min(300,innerWidth-24);el.style.width=tw+'px';const th=el.offsetHeight;
+  clearTimeout(PTIP.timer);PTIP.pinned=false;el.innerHTML=html;const link=el.querySelector('.tt-channel');el.classList.toggle('chzzk',!!link);el.setAttribute('role',link?'group':'tooltip');if(link){link.onclick=e=>e.stopPropagation();link.onblur=()=>leaveTip(card)}el.onmouseenter=link?()=>clearTimeout(PTIP.timer):null;el.onmouseleave=link?e=>{if(!card.contains(e.relatedTarget))leaveTip(card)}:null;el.hidden=false;PTIP.on=card;const r=card.getBoundingClientRect(),tw=Math.min(300,innerWidth-24);el.style.width=tw+'px';const th=el.offsetHeight;
   let x=r.right+10;if(x+tw>innerWidth-12)x=r.left-tw-10;if(x<12){x=Math.max(12,Math.min(innerWidth-tw-12,r.left+r.width/2-tw/2))}
   let y=x>=r.right||x+tw<=r.left?r.top:r.bottom+8;if(y+th>innerHeight-12)y=(x>=r.right||x+tw<=r.left)?innerHeight-th-12:r.top-th-8;y=Math.max(12,y);el.style.left=x+'px';el.style.top=y+'px'}
-function hideTip(){if(PTIP.el){PTIP.el.hidden=true;PTIP.on=null}}
+function hideTip(){clearTimeout(PTIP.timer);PTIP.pinned=false;if(PTIP.el){PTIP.el.hidden=true;PTIP.on=null}}
 // hero: [signature weapon, hp, speed, trait text]
 const HERO={
   nid:['catcombo',120,182,'이동 속도 +10% · 얼음 속성: 서리 폭발·절대영도·빙결 성채 피해 +40%'],
@@ -4403,6 +4410,7 @@ buildPicks(id=>{const k=KIT(id),w=WEAP[HERO[k][0]];/* 1.9.6.0 카드엔 무기 �
 /* ---------- update notes popup ---------- */
 const NOTES_VER='2026-11-23-1.14.6.24';
 const NOTES=[
+  ["11월 23일","1.14.7.0","캐릭터 설명에 치지직 방송 바로가기",["📺 VTUBER 12명의 ⓘ 설명창에 「치지직 방송 보러 가기」 버튼 추가 · 새 탭으로 열려요"]],
   ["11월 23일","1.14.6.24","전투 입자 처리 최적화",["공격 입자를 그릴 때 반복 계산을 줄였어요"]],
   ["11월 23일","1.14.6.23","오프닝 그림 다듬기",["🎬 가희 · 현대판 오프닝의 봄비·눈 거리 장면을 새 그림체로"]],
   ["11월 22일","1.14.6.22","새 보스 · 가희 현대판 · 편의 기능",["🗡️ 가희 · 현대판 필살기 이름 「우화설참 · RAIN TO SNOW」로 바뀜","👹 새 보스 「심연 뿔 군주」 · 새 엘리트 「두얼굴 그림자」 · 새 필드 몬스터 5종","🗡️ 가희 · 현대판 새 오프닝 · 우화설참 새 컷인과 방향 조준 · 동작 다듬기","🖼️ 일러스트 창 새 단장 · ✨ 스킬 아이콘 종류별 색 · ⏸️ 일시정지 스킬 설명","🥁 천둥 북·동탄미시 커피 웅덩이가 캐릭터를 가리지 않게 · ⏻ 게임 종료 다듬기","🔧 코인 사라짐 등 버그 수정"]],
@@ -4428,7 +4436,7 @@ function showNotes(){let d=document.getElementById('notesDlg');if(!d){d=document
     d.innerHTML=`<div class="nbody">${NOTES_HTML}</div><div class="nbtns"><button type="button" class="btn" id="notesOk">확인</button></div>`;document.body.appendChild(d);
     const close=()=>{try{localStorage.setItem('bb_notes_seen',NOTES_VER)}catch(e){}d.close()};d.querySelector('#notesOk').onclick=close;d.addEventListener('cancel',()=>{try{localStorage.setItem('bb_notes_seen',NOTES_VER)}catch(e){}});d.addEventListener('click',e=>{if(e.target===d)close()})}
   if(!d.open){if(d.showModal)d.showModal();else d.setAttribute('open','')}d.querySelector('#notesOk').focus()}
-(function(){const st=document.getElementById('settings');if(st&&!document.getElementById('notesBtn')){const b=document.createElement('button');b.type='button';b.id='notesBtn';b.className='notesbtn';b.textContent='업데이트 소식 · v1.14.6.24';b.onclick=showNotes;st.insertAdjacentElement('afterend',b)}
+(function(){const st=document.getElementById('settings');if(st&&!document.getElementById('notesBtn')){const b=document.createElement('button');b.type='button';b.id='notesBtn';b.className='notesbtn';b.textContent='업데이트 소식 · v1.14.7.0';b.onclick=showNotes;st.insertAdjacentElement('afterend',b)}
   let seen='';try{seen=localStorage.getItem('bb_notes_seen')||''}catch(e){}if(!seen){try{localStorage.setItem('bb_notes_seen',NOTES_VER)}catch(e){}}else if(seen!==NOTES_VER)SPLASH_DONE.then(()=>setTimeout(showNotes,300))})();
 var PICK_SEL=null;/* var: buildPicks 가 이 줄보다 먼저 불려도 오류 없게 */
 function roPart(s){if(!s)return'(으)로';const c=s.charCodeAt(s.length-1);if(c>=0xAC00&&c<=0xD7A3){const j=(c-0xAC00)%28;return(j===0||j===8)?'로':'으로'}return'(으)로'}
@@ -4439,7 +4447,7 @@ function selectPick(b){if(!b||b.disabled)return;if(PICK_SEL&&PICK_SEL!==b){PICK_
 document.querySelectorAll('.pick').forEach(b=>{b.setAttribute('aria-pressed','false');b.onclick=()=>{if(performance.now()<PTOG)return;if(PICK_SEL===b){const id=b.dataset.hero;clearPickSel();newGame(id)}else selectPick(b)}});
 {const go=$('pickGoBtn');if(go)go.onclick=()=>{if(!PICK_SEL)return;const id=PICK_SEL.dataset.hero;clearPickSel();newGame(id)}}
 refreshLocks();
-function showOnly(id){if(id!=='pauseOv'&&PTIP.on?.dataset.skill)hideTip();['titleOv','lvOv','pauseOv','endOv'].forEach(k=>$(k).hidden=k!==id);$('spBtn').hidden=id!==null;$('pzBtn').hidden=id!==null;if(id!=='titleOv')clearPickSel();else hideBootLoad()}
+function showOnly(id){if((id!=='pauseOv'&&PTIP.on?.dataset.skill)||(id!=='titleOv'&&PTIP.on?.classList.contains('pickc')))hideTip();/* 1.14.7.0 화면 전환 시 설명 닫기 */['titleOv','lvOv','pauseOv','endOv'].forEach(k=>$(k).hidden=k!==id);$('spBtn').hidden=id!==null;$('pzBtn').hidden=id!==null;if(id!=='titleOv')clearPickSel();else hideBootLoad()}
 let toastT,toastUntil=0;function toast(s,ms,low){if(low&&(performance.now()<toastUntil||performance.now()<sqUntil))return;/* 1.14.4.1 시작 대사가 떠 있는 동안 장소 이름 등 가벼운 알림은 생략 */toastUntil=performance.now()+ms;const el=$('toast');el.textContent=s;el.classList.remove('off');clearTimeout(toastT);toastT=setTimeout(()=>el.classList.add('off'),ms)}
 
 const XPSRC={"carrot": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAANCAYAAAB/9ZQ7AAAAsElEQVR4XmNgwAE0JIT+B6yy+Q+iYUqYkNWCJJouRaEo0JikBRYHqYMrBgmAJMAgTAys6MaRNwxGGnJw8xjRTQYpAilYNuccg4aNCMONvGsMN168A6vDUAwSPJMhxMCtpcSgmXcGbBZMMYqbkRXC2MgAQzEMfL12j+HOrS+EFYMUgpyBDlBMBrnNZMY7DEVYwxkZgEzHazIyALk3Yt8veEigRAoMEHIKBgDHJlKagAEAzVZEsQ37edAAAAAASUVORK5CYII=", "bundle": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAAOCAYAAAAi2ky3AAABDElEQVR4XmNgQAIaEkL/A1bZ/AfRIGF0Pi4xEGCCmQPSpDFJi8FIQw6uIWqXB9wamKEgsRt51xhuvHjHiOwIuEEgCZCCZXPOMSAbcOPIG7B6sAFH3jAsc9uBYQgIoJgK89KZDCEGbi0lBs28M2BF6Hx016B4DQZgmr5eu4diCDIfZiFWr4EkkQ25c+sLikJk/gonNgzD4GGEDECaIvb9wnAdPgAPI5hzLyW04NWADPQW1IC5oDBDcRHIENb2TLhaQmxkS6nmIozohwX4xQ2X4OEEAsjhBmMjJwMUr4EkTGa8g0c1CPA03AGLqajxgGMLxCYKgAL9QpQEPL/BALI4tnSEFeBSCM6P0AyNDgAojKNjzOWSUQAAAABJRU5ErkJggg==", "cake": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAAQCAYAAAD0xERiAAAA5UlEQVR4XmNgIAA0JIT+B6yy+Q+iCallwqcAZMCZDCGG9QxcDBqTtMB8fOpxGgYziFtLieHrtXsMDRvuEHIYAyOyClw2r3BiY4jY9wunYTdevAObAzcMZND1exdwasAHNJUMwAZiepNTFlMfkWJgl6G76venZwysfFIohhISA7mOBaYDpBgEYIYg82FsmIEwPgggs+GGLavIICu8kAHcMDMvD7D4qW074GxCfBS1O2YhwuzShW0UuUzPwAvhMvQAJwfAvbkwy48c/fjDDFs4ESWGHGYBOnwUuWzDlU+o2YkS00DZCQAiC2hCLDEfDgAAAABJRU5ErkJggg==", "idnom": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAA0CAYAAADxAdr3AAAC/0lEQVR4XuWZPWsVQRSGN9cUFhJBEhHhQkg0VUjQYGoLi1vlB6QR/0ZKCwt/hTb5AalSpLBWCXJRi6BJ4EIQzQdJZROUd+Qs557d+TjzkUXyQNjdu7Mz73n37JnZzURVgPt37/2hbo9+/pjIOcRkamdSHI63trdNt2uDQWr3DZKi5+K4QBJMv+V0OdlhDhdail6pjku4C5JSAlAOS3eRvzlTITsQ/nH3k/njD2JuiqZECa634JVHy8ZU5HOptLjeDl8FyWWNlzbw+d1mrXvx6Xq9n6vEeQUjF22DUZ6Ovr/3mtufXzVtZF+huU7XWQX7Vlw4HyJUIoWHCqZgG2uJkA5ixQIKsj+/ar1zLuoqARE2sSFBaIFwTb+UEj2XUA61s7lLt9pG2/mYlOppn96YQWycHXwNvjF0N0xKaEW3wXLTnCZHaZsr0DqHY0RfPn9VXX5ZN1tO71a/Gk4NzJZja69B9cYBl3492ahmPjCBrxfHxkObk4cvzG/YNpwV7V20magSLLnxdqN1vKWLfy+hYFS9rPdt7UlYSNUYmzh8F+TKQwL53eaia3Ydq8P0AKKTto5yM9x502qSa+zgtYTP/VRCDfLmsOxodm6h2jqeq/WtTe/Xx3IfuNoSh/t7wfFGLeAhDJDAqaWbDXFSKF3Dr4shSjAHQi6Gvxtjc4EQzwNIIVkwOSaDkMc8gBSiBJNb8ra3iac85m2xHxuAt0oQ/02VsLF751n1+HTHnOYTimuZyd/3bvcfmGttk4eNYIeBxmUuDpBAiVawtw5LpBAXNpEpqBwml3OuKbQOR1WJLulU8Pnomzr2TgUjx7Vvz2rBWAy5Sldp1IK7JqhKyPqL0oYPfV1UC28dtn04gWikBrZUb/EQ0RfLnMFwnA7HfEODaO2EQYGGvHVkz2GtWC3ZBWvRuAu8OVwKXhpDUoHoxOFYsVfuMJ+KNa5ynA7bZjUMbJvt8LtcI+CYchVlL1YsUE0cNGFweB3mQdC6mf8nCaSIDRYMaLbjA8oZMPRcCn8BKcajzlJD3W8AAAAASUVORK5CYII="};
@@ -5665,7 +5673,7 @@ function showGal(){let d=$('galDlg');if(!d){d=document.createElement('dialog');d
 (function(){const row=document.querySelector('.topbtns');if(!row)return;const gb=document.createElement('button');gb.type='button';gb.id='galBtn';gb.className='notesbtn';gb.textContent='🖼️ 일러스트';gb.onclick=()=>showGal();row.append(gb)})();
 (function(){const row=document.querySelector('.topbtns');if(!row)return;const ab=document.createElement('button');ab.type='button';ab.id='achBtn';ab.className='notesbtn';ab.textContent='🏆 업적';ab.onclick=()=>showAch();row.append(ab);achBadge();setInterval(()=>{const o=$('titleOv');if(!document.hidden&&o&&!o.hidden)achBadge()},4000)/* 게임 중엔 안 돎 */})();
 /* 1.13.16.5 새 버전 알림: GitHub 페이지에서만, 작은 version.json을 3분마다(그리고 탭으로 돌아올 때) 확인해 이 화면보다 새 빌드가 있으면 처음 화면에 「새로고침」 띠를 띄움. 게임 중엔 안 띄우고 처음 화면으로 돌아오면 보여 줌 */
-const BUILD='20261123144606';
+const BUILD='20261123151105';
 /* 1.13.16.15 앱(PWA) · 1.13.16.16 버튼 항상 보이게: GitHub 주소면 서비스워커 등록 + 「📲 앱으로 설치」(크롬은 설치 창, 없으면 메뉴 안내, 아이폰은 Safari 공유 → 홈 화면에 추가 안내).
    카카오톡·네이버 등 앱 안 브라우저면 크롬(외부 브라우저)으로 열어 줌. Claude 페이지 등 다른 주소면 GitHub 주소를 새 창으로 열어 줌. 이미 앱으로 열었으면 버튼 없음 */
 (function(){const GH='https://vnfms3346-alt.github.io/beatblade/';const onGH=/github\.io$/.test(location.hostname);
