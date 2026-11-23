@@ -1115,7 +1115,7 @@ const WEAP={
   tailwhip:{sig:'kamil',name:'꼬리 채찍',ic:'🦎',desc:lv5(['박자마다 줄무늬 꼬리를 좌우로 번갈아 휘둘러 앞쪽을 쓸어냄','피해 +20%','맞은 적이 출혈하고 느려짐, 꼬리 길이 +15%','피해 +15%','꼬리와 함께 고양이 발로 한 번 더 톡! (잠깐 기절), 꼬리 길이 +10%'])},
   tkick:{sig:'violetB',name:'트로피컬 태권',ic:'🍹',desc:lv5(['박자마다 빈손 스트레이트 · 회전 돌려차기 (칵테일은 한 손에 든 채)','피해 +25%','태권 3단 발차기(옆차기 → 돌려차기 → 공중 차기) 추가, 범위 +','피해 +20%, 범위 +','공중 차기 끝에 칵테일 파도가 앞으로 쭉'])},
   raccoon:{sig:'violetR',name:'너구리 돌진',ic:'🦝',desc:lv5(['2박마다 하얀 너구리가 앞쪽으로 달려 나가 들이받음','피해 +25%','달려간 끝에서 배치기 충격파','너구리 2마리, 피해 +20%','박자마다 달려 나감, 더 멀리'])},
-  wrench:{sig:'damirof',name:'렌치 & 포탑',ic:'🔧',desc:lv5(['박자마다 렌치로 앞쪽의 일반 적을 잠깐 멈추게 하고, 4박마다 14초 동안 너트를 쏘는 포탑을 설치 (최대 1대)','피해 +25%','포탑 2대, 렌치 범위 +15%','피해 +20%','포탑 3대, 포탑이 두 발씩 쏨'])},
+  wrench:{sig:'damirof',name:'렌치 & 포탑',ic:'🔧',desc:lv5(['박자마다 앞쪽을 렌치로 때려 일반 적을 잠깐 멈추게 하고, 4박마다 14초 동안 너트를 쏘는 포탑을 설치 (최대 1대)','피해 +25%','포탑 2대, 렌치 범위 +15%','피해 +20%','포탑 3대, 포탑이 두 발씩 쏨'])},
   water:{sig:'glassesB',name:'워터 스나이퍼',ic:'🔫',desc:lv5(['2박마다 가장 강한 적을 조준해 물총으로 꿰뚫음 (느려짐)','피해 +25%','비치볼이 튀어 다니며 적 3명을 맞힘','피해 +25%, 물줄기 2발','박자마다 발사, 비치볼 5번 튕김'])},
   dodge:{sig:'gymgl',name:'피구 강슛',ic:'🏐',desc:lv5(['박자마다 피구공을 세게 던져 맞히고 옆 적에게 두 번 튕김', '공 2개, 피해 +25%', '공이 커지고 맞은 적이 잠깐 기절, 3번 튕김', '피해 +20%', '4번 튕김, 4박마다 몸통 박치기 돌진'])},
   onetwo:{sig:'graygl',name:'원투 스트레이트',ic:'👊',desc:lv5(['박자마다 좌우 번갈아 주먹 충격파를 일직선으로 날림 (꿰뚫음)', '피해 +25%, 2명 관통', '2박마다 주먹 2발, 주먹이 커짐', '피해 +25%, 3명 관통', '4박마다 재킷 회전으로 주위를 날려 버림'])},
@@ -1277,7 +1277,7 @@ function segDist(px,py,x1,y1,x2,y2){const dx=x2-x1,dy=y2-y1,l=dx*dx+dy*dy||1;let
 function attackLine(a,len,scale,w,y=heroCY(),fn){return onLine(G.x,y,G.x+Math.cos(a)*len,y+Math.sin(a)*len*scale,w,fn)}
 function onLine(x1,y1,x2,y2,w,fn){for(const f of G.foes){if(f.dead)continue;if(segDist(f.x,foeCY(f),x1,y1,x2,y2)<w+f.r*.5){if(!fn)return true;fn(f)}}return false}
 function addEnt(e){G.ents.push(e);return e}
-function heroAttack(a){const pn=performance.now();if(!G.moving&&!G.atkAnim)G.atkAnim={a:a||ROSTER[G.heroId].a1,t0:pn};if(pn-G.pulseT>140){G.pulseT=pn;if(!LOWFX)emit(G.x,heroCY(),3,{type:HPART[G.heroId],c:HC[G.heroId],sp:150,up:30,life:.55,s:5,vr:8})}}
+function heroAttack(a,face){const pn=performance.now();if(!G.moving&&!G.atkAnim)G.atkAnim={a:a||ROSTER[G.heroId].a1,t0:pn,face};if(pn-G.pulseT>140){G.pulseT=pn;if(!LOWFX)emit(G.x,heroCY(),3,{type:HPART[G.heroId],c:HC[G.heroId],sp:150,up:30,life:.55,s:5,vr:8})}}
 
 /* ---------- damage ---------- */
 function hurtFoe(f,dmg,kx=0,ky=0,o={}){
@@ -1582,7 +1582,7 @@ const FIRE={
       for(let k=2;k>=0;k--){const ak=a0+1.8*Math.max(0,ease-k*.14);wrenchIcon(x+Math.cos(ak)*r*.85,y+Math.sin(ak)*r*.85,ak+1.57,f*(k?.22:1),1)}}});
     }
     const mx=pick([1,1,2,2,3],l);if(!half&&every(hb,4)){const ts=G.ents.filter(e=>e.k==='turret'&&!e.temp&&!e.dead);if(ts.length>=mx)ts[0].dead=1;const an=Math.random()*6.283;addEnt(mkTurret(G.x+Math.cos(an)*75,G.y+Math.sin(an)*55,pick([1,1.25,1.25,1.5,1.5],l)*WBN/* 1.14.4.9 전용 무기 강화(WB)를 포탑에도 */,l>=5?2:1,14))}
-    if(swing){heroAttack('wrench_swing');sfx.slash(ac.currentTime)}},
+    if(swing){heroAttack('wrench_swing',G.face);/* 1.14.7.2 렌치 동작 방향 유지 */sfx.slash(ac.currentTime)}},
   water(l,hb,half,enc){if(!every(hb,pick([2,2,2,2,1],l))&&!(enc&&!half))return;const n=l>=4?2:1,m=pick([1,1.25,1.25,1.56,1.56],l)*dmgMul(),RG=440,used=new Set();
     for(let i=0;i<n;i++){let tg=null,best=-1;for(const f of G.foes){if(f.dead||used.has(f))continue;const d=Math.hypot(f.x-G.x,foeCY(f)-heroCY());if(d>RG)continue;const sc=f.hp+(BIG(f)?9999:0);if(sc>best){best=sc;tg=f}}if(!tg)break;used.add(tg);waterJet(tg,33*m,RG,i*.08)}
     if(l>=3&&every(hb,4)){const tg=nearest(G.x,heroCY(),380);if(tg)beachBall(tg,16*m,l>=5?5:3)}
@@ -3233,6 +3233,7 @@ const SPECIAL={
 // special damage balance: narrow specials hit harder, screen-wide ones softer (measured hits on a 132-dummy field)
 /* 1.14.1.0 필살기 밸런스 재측정(Lv1·허수아비 112·무기 끔): 총 피해를 1만~3만 사이로 — 3만 넘던 7종은 너프, 1만 안 되던 캐릭터는 버프(회복·보조형 소나카·윤설은·이드 심판의 고리·청하는 8천), 앙코르는 무기 버프형이라 그대로 */const SPM={gaheeM:1.05,violetB:1.1,damiroK:1.06,gahee:1.08,marjanao:0.93,bunny:0.35,kamil:0.5,idaxe:0.6,redpony:0.9,marjanam:1.06,lumen:0.75,bunnym:0.44,coffee:0.71,yue:0.88,violetR:0.75,suryeo:0.65,seolM:1.1,knight:1.59,yeon:1.63,princess:2.25,angel:2.78,damirof:1.66,pinkbunny:1.5,lion:1.83,glasses:11.11,elf:1.02,violet:1.78,saurisP:7.99,korea:6.41,gymgl:2.6,graygl:1.4,vest:3.36,idtrip:2.4,ruby:1.5,nid:1.91,sleepy:2.73,glassesB:1.59,guitar:1.17,wingcat:1.31,sage:10.06,deer:6.72,hanbyul:1.46,kate:8.93,damiro:1.43};
 function skipCut(){/* 1.13.16.14 컷인 중 Space(또는 필살기 버튼) 한 번 더 → 바로 끝내기(마지막 0.2초 사라짐만 보여 줌). 실수로 두 번 누르지 않게 시작 0.15초는 무시 */const c=G&&G.cut;if(!c||c.t<.15||c.t>=CUT_T-.25)return;c.t=CUT_T-.22;c.sk2=1;syncCutVideo(false,0)}
+/* 1.14.7.2 공구 남성 등 같은 기술을 쓰는 스킨 이름으로 컷인 표시 */function cutSkin(id){return G&&id==='damirof'&&G.skin&&KIT(G.skin)===id?G.skin:id}
 function useSpecial(){
   if(G&&G.cut&&!G.paused&&!G.over){skipCut();return}
   if(!G||G.paused||G.over||G.choosing||G.gmSpecial||G.sp<100)return;
@@ -4550,6 +4551,7 @@ buildPicks(id=>{const k=KIT(id),w=WEAP[HERO[k][0]];/* 1.9.6.0 카드엔 무기 �
 /* ---------- update notes popup ---------- */
 const NOTES_VER='2026-11-23-1.14.7.2';
 const NOTES=[
+  ["11월 23일 17:00","1.14.7.3","랭킹 점검 · 다미로 공구 수정",["🏆 일반 모드에서 15분 넘긴 판도 실제 시간으로 순위·표시","🔁 온라인 기록 등록이 실패하면 알려 주고 「다시 올리기」 가능","⚠️ 순위를 못 불러오면 「온라인 연결 실패 · 이 기기 기록」으로 표시","🏅 종합 메달에 무한 생존 · 보스 러시 순위도 포함","🔧 다미로 공구: 렌치 동작 방향 유지 · 스킨별 기록 · 필살기 이름 표시"]],
   ["11월 23일 16:20","1.14.7.2","보스 러시 강화",["👹 보스 러시: 보스를 잡을수록 새 패턴 — 바닥 레이저·따라오는 장판·박자 충격파","⚡ 3번째 보스부터 연속 공격, 5번째부터 분노 변형","✨ 보스 공격 예고·폭발·잔상 이펙트 강화 (모든 모드)"]],
   ["11월 23일","1.14.7.1","특수 몬스터 강화",["👥 두얼굴 그림자 체력 약 1.6배 · 접촉·돌진 피해 조금 증가","🛡️ 지역 수호자 체력 약 1.35배","😈 심연 뿔 군주 체력 1.2배 · 공격 간격 3.6초→3.05초"]],
   ["11월 23일","1.14.7.0","캐릭터 설명에 치지직 방송 바로가기",["📺 VTUBER 12명의 ⓘ 설명창에 「치지직 방송 보러 가기」 버튼 추가 · 새 탭으로 열려요"]],
@@ -4578,7 +4580,7 @@ function showNotes(){let d=document.getElementById('notesDlg');if(!d){d=document
     d.innerHTML=`<div class="nbody">${NOTES_HTML}</div><div class="nbtns"><button type="button" class="btn" id="notesOk">확인</button></div>`;document.body.appendChild(d);
     const close=()=>{try{localStorage.setItem('bb_notes_seen',NOTES_VER)}catch(e){}d.close()};d.querySelector('#notesOk').onclick=close;d.addEventListener('cancel',()=>{try{localStorage.setItem('bb_notes_seen',NOTES_VER)}catch(e){}});d.addEventListener('click',e=>{if(e.target===d)close()})}
   if(!d.open){if(d.showModal)d.showModal();else d.setAttribute('open','')}d.querySelector('#notesOk').focus()}
-(function(){const st=document.getElementById('settings');if(st&&!document.getElementById('notesBtn')){const b=document.createElement('button');b.type='button';b.id='notesBtn';b.className='notesbtn';b.textContent='업데이트 소식 · v1.14.7.2';b.onclick=showNotes;st.insertAdjacentElement('afterend',b)}
+(function(){const st=document.getElementById('settings');if(st&&!document.getElementById('notesBtn')){const b=document.createElement('button');b.type='button';b.id='notesBtn';b.className='notesbtn';b.textContent='업데이트 소식 · v1.14.7.3';b.onclick=showNotes;st.insertAdjacentElement('afterend',b)}
   let seen='';try{seen=localStorage.getItem('bb_notes_seen')||''}catch(e){}if(!seen){try{localStorage.setItem('bb_notes_seen',NOTES_VER)}catch(e){}}else if(seen!==NOTES_VER)SPLASH_DONE.then(()=>setTimeout(showNotes,300))})();
 var PICK_SEL=null;/* var: buildPicks 가 이 줄보다 먼저 불려도 오류 없게 */
 function roPart(s){if(!s)return'(으)로';const c=s.charCodeAt(s.length-1);if(c>=0xAC00&&c<=0xD7A3){const j=(c-0xAC00)%28;return(j===0||j===8)?'로':'으로'}return'(으)로'}
@@ -4843,7 +4845,7 @@ function clearCut(){
   INCUT=false;document.body.classList.remove('incut');
 }
 function drawCutGif(c,t){const g=CUTGIF[c.gif],col=HC[c.id]||'#ffffff',k=H/540,cl=(x,a,b)=>Math.max(a,Math.min(b,x)),ease=x=>x*x;
-  const nameAt=(x,y,fs,al,rot)=>{ctx.save();ctx.translate(x,y);ctx.rotate(rot);ctx.globalAlpha=al;ctx.textAlign='center';ctx.textBaseline='middle';ctx.font=`800 ${fs}px ${FD}`;ctx.lineJoin='round';ctx.lineWidth=fs*.22;ctx.strokeStyle='rgba(6,6,12,.92)';ctx.strokeText(c.name,0,0);ctx.lineWidth=fs*.09;ctx.strokeStyle=rgba(col,.95);ctx.strokeText(c.name,0,0);ctx.fillStyle='#ffffff';ctx.fillText(c.name,0,0);if(g.en){/* 1.13.16.14 영문 기술명(세레나 LUNAR SLASH) — 이름 위에 은빛 자간 넓게 */ctx.save();ctx.font=`900 ${Math.round(fs*.42)}px ${FD}`;try{ctx.letterSpacing=Math.round(fs*.12)+'px'}catch(_){}ctx.lineWidth=fs*.09;ctx.strokeStyle='rgba(6,6,12,.9)';ctx.strokeText(g.en,0,-fs*.78);ctx.fillStyle='#d8e6ff';ctx.fillText(g.en,0,-fs*.78);ctx.restore()}ctx.font=`800 ${Math.round(fs*.38)}px ${FN}`;ctx.lineWidth=fs*.16;ctx.strokeStyle='rgba(6,6,12,.95)';ctx.strokeText(caption/* 1.14.7.2 공구 스킨 이름 표시 */,0,fs*.86);ctx.fillStyle='#fff4d6';ctx.fillText(caption,0,fs*.86);/* 1.14.6.5 잘 보이게: 크게·굵게·검은 테두리 */ctx.restore();ctx.globalAlpha=1};
+  const nameAt=(x,y,fs,al,rot)=>{ctx.save();ctx.translate(x,y);ctx.rotate(rot);ctx.globalAlpha=al;ctx.textAlign='center';ctx.textBaseline='middle';ctx.font=`800 ${fs}px ${FD}`;ctx.lineJoin='round';ctx.lineWidth=fs*.22;ctx.strokeStyle='rgba(6,6,12,.92)';ctx.strokeText(c.name,0,0);ctx.lineWidth=fs*.09;ctx.strokeStyle=rgba(col,.95);ctx.strokeText(c.name,0,0);ctx.fillStyle='#ffffff';ctx.fillText(c.name,0,0);if(g.en){/* 1.13.16.14 영문 기술명(세레나 LUNAR SLASH) — 이름 위에 은빛 자간 넓게 */ctx.save();ctx.font=`900 ${Math.round(fs*.42)}px ${FD}`;try{ctx.letterSpacing=Math.round(fs*.12)+'px'}catch(_){}ctx.lineWidth=fs*.09;ctx.strokeStyle='rgba(6,6,12,.9)';ctx.strokeText(g.en,0,-fs*.78);ctx.fillStyle='#d8e6ff';ctx.fillText(g.en,0,-fs*.78);ctx.restore()}ctx.font=`800 ${Math.round(fs*.38)}px ${FN}`;ctx.lineWidth=fs*.16;ctx.strokeStyle='rgba(6,6,12,.95)';/* 1.14.7.2 공구 스킨 이름 표시 */ctx.strokeText(caption,0,fs*.86);ctx.fillStyle='#fff4d6';ctx.fillText(caption,0,fs*.86);/* 1.14.6.5 잘 보이게: 크게·굵게·검은 테두리 */ctx.restore();ctx.globalAlpha=1};
   const flash=a=>{if(a>0){ctx.fillStyle=`rgba(255,250,235,${a})`;ctx.fillRect(0,0,W,H)}};
   if(g.mode==='vid'){/* 1.13.16.8 영상 필살기 컷인(다미로 경화수월 · 세레나). 영상은 미리 속도를 당기고 늦춰 박자감 있게 편집(전반은 빠르게, 칼을 뽑고 빛이 터지는 순간은 천천히). 화면 위 효과는 영상 시간표에 맞춤: beats=두근(확대·흔들림·번쩍임·집중선), burst=빛 폭발(색 섬광·충격파·빛줄기), 끝나면 살짝 커지며 사라짐 */
     const v=cgV(g.v,2),T=g.T,vOk=v&&(c.videoFallback||c.videoStarted&&!v.seeking&&!(v.ended&&t<T-.2))/* 1.14.6.22 되감기 전·중의 지난 영상 마지막 장면은 안 그림 */,c2=g.c2||col,tIn=cl(t/.16,0,1),tOut=cl((t-T)/.2,0,1),bk=x=>{const c1=1.70158,c3=c1+1;return 1+c3*Math.pow(x-1,3)+c1*Math.pow(x-1,2)};
@@ -4854,7 +4856,7 @@ function drawCutGif(c,t){const g=CUTGIF[c.gif],col=HC[c.id]||'#ffffff',k=H/540,c
       const beat=Math.max(...g.beats.map(b=>t>=b?Math.max(0,1-(t-b)/.1):0));
       const burst=t>=g.burst?Math.max(0,1-(t-g.burst)/.16):0;
       flash((1-tOut)*Math.max(.12*beat,.2*burst));
-      if(g.nm&&t>=g.nm){/* 1.14.6.16 영상에 글자가 없는 컷인: 일섬 뒤 기술 이름을 화면 아래에 */const e=Math.min(1,(t-g.nm)/.25),fs=Math.round(Math.min(64,W/12)),y=H*.8;ctx.save();ctx.globalAlpha=e*(1-tOut);ctx.textAlign='center';ctx.textBaseline='middle';ctx.lineJoin='round';ctx.font=`900 ${fs}px ${FD}`;try{ctx.letterSpacing=Math.round(fs*.08)+'px'}catch(_){}ctx.lineWidth=fs*.2;ctx.strokeStyle='rgba(6,8,16,.92)';if(g.en){/* 2026-11-23 영상 컷인도 영문 기술명을 이름 위에(세레나 방식) */ctx.save();ctx.font=`900 ${Math.round(fs*.42)}px ${FD}`;try{ctx.letterSpacing=Math.round(fs*.12)+'px'}catch(_){}ctx.lineWidth=fs*.09;ctx.strokeStyle='rgba(6,8,16,.9)';ctx.strokeText(g.en,W/2,y-fs*.8-(1-e)*12);ctx.fillStyle='#d8e6ff';ctx.fillText(g.en,W/2,y-fs*.8-(1-e)*12);ctx.restore()}ctx.strokeText(c.name,W/2,y-(1-e)*12);ctx.lineWidth=fs*.07;ctx.strokeStyle=rgba(c2,.95);ctx.strokeText(c.name,W/2,y-(1-e)*12);ctx.fillStyle='#ffffff';ctx.fillText(c.name,W/2,y-(1-e)*12);try{ctx.letterSpacing='0px'}catch(_){}ctx.font=`800 ${Math.round(fs*.34)}px ${FN}`;ctx.lineWidth=fs*.1;ctx.strokeStyle='rgba(6,8,16,.92)';ctx.strokeText(RN(c.id)+'  ·  필살기',W/2,y+fs*.78);ctx.fillStyle='#e6f2ff';ctx.fillText(RN(c.id)+'  ·  필살기',W/2,y+fs*.78);ctx.restore()}
+      if(g.nm&&t>=g.nm){/* 1.14.6.16 영상에 글자가 없는 컷인: 일섬 뒤 기술 이름을 화면 아래에 */const e=Math.min(1,(t-g.nm)/.25),fs=Math.round(Math.min(64,W/12)),y=H*.8;ctx.save();ctx.globalAlpha=e*(1-tOut);ctx.textAlign='center';ctx.textBaseline='middle';ctx.lineJoin='round';ctx.font=`900 ${fs}px ${FD}`;try{ctx.letterSpacing=Math.round(fs*.08)+'px'}catch(_){}ctx.lineWidth=fs*.2;ctx.strokeStyle='rgba(6,8,16,.92)';if(g.en){/* 2026-11-23 영상 컷인도 영문 기술명을 이름 위에(세레나 방식) */ctx.save();ctx.font=`900 ${Math.round(fs*.42)}px ${FD}`;try{ctx.letterSpacing=Math.round(fs*.12)+'px'}catch(_){}ctx.lineWidth=fs*.09;ctx.strokeStyle='rgba(6,8,16,.9)';ctx.strokeText(g.en,W/2,y-fs*.8-(1-e)*12);ctx.fillStyle='#d8e6ff';ctx.fillText(g.en,W/2,y-fs*.8-(1-e)*12);ctx.restore()}ctx.strokeText(c.name,W/2,y-(1-e)*12);ctx.lineWidth=fs*.07;ctx.strokeStyle=rgba(c2,.95);ctx.strokeText(c.name,W/2,y-(1-e)*12);ctx.fillStyle='#ffffff';ctx.fillText(c.name,W/2,y-(1-e)*12);try{ctx.letterSpacing='0px'}catch(_){}ctx.font=`800 ${Math.round(fs*.34)}px ${FN}`;ctx.lineWidth=fs*.1;ctx.strokeStyle='rgba(6,8,16,.92)';ctx.strokeText(RN(cutSkin(c.id))+'  ·  필살기',W/2,y+fs*.78);ctx.fillStyle='#e6f2ff';ctx.fillText(RN(cutSkin(c.id))+'  ·  필살기',W/2,y+fs*.78);ctx.restore()}
       return;
     }
     let pulse=0,sh=0,fl=0,bi=-1;for(let i=0;i<g.beats.length;i++){const p=t-g.beats[i];if(p>=0&&p<.32){const e=1-p/.32;pulse=Math.max(pulse,e*e);sh=Math.max(sh,p<.18?1-p/.18:0);fl=Math.max(fl,p<.1?(1-p/.1)*.42:0);bi=i}}
@@ -4938,7 +4940,7 @@ function drawCutArt(c,t){/* 1.11.0.0 전신 컷인: 어둠 → 비스듬한 색 
   if(wide){const tIn=1-(1-Math.min(1,Math.max(0,(t-.2)/.2)))**3,fs=Math.round(Math.min(tall?W/7.5:W/12,70)),tx=tall?W*.5:fs*3.2,ty=tall?cy+bhM*.5+fs*.95:cy-bhM*.5+fs*.75;/* 가로: 왼쪽 위(머리카락 쪽) — 얼굴·칼과 오른쪽 아래 필살기 칸을 가리지 않게 */
     ctx.save();ctx.translate(tx+(1-tIn)*W*.5+oe*W*.4,ty);ctx.rotate(-.1);ctx.globalAlpha=a*tIn;ctx.textAlign='center';ctx.textBaseline='middle';ctx.font=`800 ${fs}px ${FD}`;ctx.lineJoin='round';
     ctx.lineWidth=fs*.24;ctx.strokeStyle='rgba(6,6,12,.95)';ctx.strokeText(c.name,0,0);ctx.lineWidth=fs*.09;ctx.strokeStyle=rgba(col,.95);ctx.strokeText(c.name,0,0);ctx.fillStyle='#ffffff';ctx.fillText(c.name,0,0);
-    ctx.font=`600 ${Math.round(fs*.3)}px ${FN}`;ctx.lineWidth=fs*.1;ctx.strokeStyle='rgba(6,6,12,.9)';ctx.strokeText(RN(c.id)+'  ·  필살기',0,fs*.82);ctx.fillStyle='#ffffff';ctx.fillText(RN(c.id)+'  ·  필살기',0,fs*.82);ctx.restore();
+    ctx.font=`600 ${Math.round(fs*.3)}px ${FN}`;ctx.lineWidth=fs*.1;ctx.strokeStyle='rgba(6,6,12,.9)';ctx.strokeText(RN(cutSkin(c.id))+'  ·  필살기',0,fs*.82);ctx.fillStyle='#ffffff';ctx.fillText(RN(cutSkin(c.id))+'  ·  필살기',0,fs*.82);ctx.restore();
     const fl=t>.2&&t<.38?1-(t-.2)/.18:0;if(fl>0){ctx.globalCompositeOperation='lighter';ctx.fillStyle=rgba(col,.2*fl);ctx.fillRect(0,0,W,H);ctx.fillStyle=`rgba(255,255,255,${.16*fl})`;ctx.fillRect(0,0,W,H);ctx.globalCompositeOperation='source-over'}
     ctx.globalAlpha=1;return}
   /* 그림: 무릎 위 구도라 아래는 화면 밖으로 조금 내려 자연스럽게 잘림 */
@@ -4950,7 +4952,7 @@ function drawCutArt(c,t){/* 1.11.0.0 전신 컷인: 어둠 → 비스듬한 색 
   const tIn=1-(1-Math.min(1,Math.max(0,(t-.16)/.2)))**3,fs=Math.round(Math.min(tall?W/7.5:W/11,76)),tx=tall?W*.5:Math.min(W*.74,W-fs*2.6),ty=tall?Math.min(H*.76,by-fs*.2):H*.5;
   ctx.save();ctx.translate(tx+(1-tIn)*W*.5+oe*W*.4,ty);ctx.rotate(-.1);ctx.globalAlpha=a*tIn;ctx.textAlign='center';ctx.textBaseline='middle';ctx.font=`800 ${fs}px ${FD}`;ctx.lineJoin='round';
   ctx.lineWidth=fs*.22;ctx.strokeStyle='rgba(6,6,12,.92)';ctx.strokeText(c.name,0,0);ctx.lineWidth=fs*.09;ctx.strokeStyle=rgba(col,.95);ctx.strokeText(c.name,0,0);ctx.fillStyle='#ffffff';ctx.fillText(c.name,0,0);
-  const tw=ctx.measureText(c.name).width;ctx.fillStyle=rgba(col,.9);ctx.fillRect(-tw/2,fs*.66,tw*tIn,3);ctx.font=`600 ${Math.round(fs*.3)}px ${FN}`;ctx.fillStyle='#ffffff';ctx.fillText(RN(c.id)+'  ·  필살기',0,fs*1.02);ctx.restore();
+  const tw=ctx.measureText(c.name).width;ctx.fillStyle=rgba(col,.9);ctx.fillRect(-tw/2,fs*.66,tw*tIn,3);ctx.font=`600 ${Math.round(fs*.3)}px ${FN}`;ctx.fillStyle='#ffffff';ctx.fillText(RN(cutSkin(c.id))+'  ·  필살기',0,fs*1.02);ctx.restore();
   /* 이름이 꽂히는 순간 섬광 */
   const fl=t>.16&&t<.34?1-(t-.16)/.18:0;if(fl>0){ctx.globalCompositeOperation='lighter';ctx.fillStyle=rgba(col,.22*fl);ctx.fillRect(0,0,W,H);ctx.fillStyle=`rgba(255,255,255,${.18*fl})`;ctx.fillRect(0,0,W,H);ctx.globalCompositeOperation='source-over'}
   ctx.globalAlpha=1}
@@ -4963,7 +4965,7 @@ function drawCutin(){const c=G.cut;{const on=!!c;if(on!==INCUT){INCUT=on;documen
   ctx.save();ctx.beginPath();ctx.save();ctx.translate(W/2,cy);ctx.rotate(-.07);ctx.rect(-W*.75,-bh/2,W*1.5,bh);ctx.restore();ctx.clip();
   const sc=bh*1.45/SPR_T,hx=W*.27-(1-inE)*W*.5+t*24;if(ld){/* 얼굴이 띠 왼쪽 1/4쯤에 오게, 천천히 밀려 들어옴 */const ih=bh*1.5,iw=ih*ld.naturalWidth/ld.naturalHeight,ix=Math.max(W*.26,iw*.42)-iw*.5-(1-inE)*W*.5+t*18;ctx.globalAlpha=a;ctx.drawImage(ld,ix,cy-bh/2-ih*.07+ (W/2-ix-iw/2)*.07,iw,ih);ctx.globalAlpha=1}else drawSpr(c.sk||c.id,ROSTER[c.sk||c.id].a2,Math.floor(t*10),hx,cy+bh*.62,sc,1,{alpha:a});ctx.restore();
   const tx=(ld?Math.min(W*.62,W-Math.min(48,W/13)*4.6):W*.46)+(1-inE)*W*.35,fs=Math.round(Math.min(48,W/13));ctx.save();ctx.globalAlpha=a;ctx.textAlign='left';ctx.textBaseline='middle';ctx.font=`800 ${fs}px ${FD}`;ctx.lineJoin='round';const ty=ld?cy+bh*.2:cy-10;ctx.lineWidth=Math.max(6,fs*.2);ctx.strokeStyle='rgba(6,4,8,.92)';ctx.strokeText(c.name,tx,ty);ctx.lineWidth=Math.max(3,fs*.08);ctx.strokeStyle=rgba(col,.95);/* 1.14.6.5 이름 검은 테두리를 항상 */ctx.strokeText(c.name,tx,ty);ctx.fillStyle='#ffffff';ctx.fillText(c.name,tx,ty);
-  ctx.font=`800 ${Math.round(fs*.4)}px ${FN}`;{const sy=(ld?cy+bh*.2+10:cy)+fs*.68,caption=RN(c.id==='damirof'?G.skin:c.id)+'  ·  필살기';ctx.lineWidth=Math.max(4,fs*.14);ctx.strokeStyle='rgba(6,4,8,.92)';ctx.strokeText(RN(c.id)+'  ·  필살기',tx+3,sy);ctx.fillStyle='#fff4d6';ctx.fillText(RN(c.id)+'  ·  필살기',tx+3,sy)}/* 1.14.6.5 잘 보이게 */ctx.restore();ctx.globalAlpha=1}
+  ctx.font=`800 ${Math.round(fs*.4)}px ${FN}`;{const sy=(ld?cy+bh*.2+10:cy)+fs*.68,caption=RN(cutSkin(c.id))+'  ·  필살기';ctx.lineWidth=Math.max(4,fs*.14);ctx.strokeStyle='rgba(6,4,8,.92)';ctx.strokeText(RN(cutSkin(c.id))+'  ·  필살기',tx+3,sy);ctx.fillStyle='#fff4d6';ctx.fillText(RN(cutSkin(c.id))+'  ·  필살기',tx+3,sy)}/* 1.14.6.5 잘 보이게 */ctx.restore();ctx.globalAlpha=1}
 let FR_LAST=0;function frame(pn){
   requestAnimationFrame(frame);SPRB=0;
   {/* 1.8.7.5 모바일: 120Hz 화면에서도 60fps로만 그리고, 일시정지·레벨업 선택 중에는 20fps로 낮춰 발열·배터리 절약 */const idle=G&&(G.paused||G.choosing||G.over);/* 1.13.16.17 처음 화면(배경 숲만 흐름)은 폰에서 30fps, 오프닝 영상이 떠 있는 동안은 그리지 않음 */if(!G&&document.getElementById('splash'))return;const gap=idle?48:!G?(MOBILE?32:15.5):15.5;if((MOBILE||idle||!G)&&pn-FR_LAST<gap)return;FR_LAST=pn}
@@ -5359,13 +5361,14 @@ const RK={
   clean(s){return String(s||'').replace(/[<>"'`\\]/g,'').trim().slice(0,12)},
   local(){try{return JSON.parse(localStorage.getItem('bb_scores')||'[]')}catch(e){return[]}},
   saveLocal(a){try{localStorage.setItem('bb_scores',JSON.stringify(a.slice(-200)))}catch(e){}},
-  async req(path,opt){if(!FB_URL)throw new Error('offline');const r=await fetch(FB_URL.replace(/\/$/,'')+path,opt);if(!r.ok)throw new Error(r.status);return r.json()},
+  req(path,opt){/* 1.14.7.3 같은 주소를 3초 안에 다시 받으면 한 번만 내려받음(종합 탭) */if(!opt){const c=RK._gc||(RK._gc={}),h=c[path];if(h&&Date.now()-h.t<3000)return h.p;const p=RK._req(path);c[path]={t:Date.now(),p};p.catch(()=>{delete c[path]});return p}return RK._req(path,opt)},
+  async _req(path,opt){if(!FB_URL)throw new Error('offline');const r=await fetch(FB_URL.replace(/\/$/,'')+path,opt);if(!r.ok)throw new Error(r.status);return r.json()},
   /* 1.8.5.4 일반 모드 순위: 이긴 기록은 빨리 잡을수록 위(클리어 타임), 진 기록은 오래 버틸수록 위. 이긴 기록 > 진 기록. 동점은 처치 수 */
-  score(e){const t=Math.floor(e.t),k=Math.min(99,Math.floor((e.k||0)/50));return e.w?100000+Math.max(0,999-t)*100+k:Math.min(999,t)*100+k},
-  async submit(e){const rec=Object.assign({u:RK.id},e,{ts:Date.now()});const L=RK.local();L.push(rec);RK.saveLocal(L);
-    if(RK.online()){try{const pth='/scores/'+e.d+'.json';rec.a?await AU.db(pth,{method:'POST',body:JSON.stringify(rec)}):await RK.req(pth,{method:'POST',body:JSON.stringify(rec)});return 'online'}catch(err){return 'local'}}return 'local'},
+  score(e){const t=Math.floor(e.rt!=null?e.rt:e.t)/* 11/23 랭킹 점검: 일반 모드 15분 넘긴 판은 실제 시간 rt */,k=Math.min(99,Math.floor((e.k||0)/50));return e.w?100000+Math.max(0,999-t)*100+k:Math.min(999,t)*100+k},
+  async submit(e,noLocal){const rec=Object.assign({u:RK.id},e,{ts:Date.now()});if(!noLocal){const L=RK.local();L.push(rec);RK.saveLocal(L)}
+    if(RK.online()){try{const pth='/scores/'+e.d+'.json';rec.a?await AU.db(pth,{method:'POST',body:JSON.stringify(rec)}):await RK.req(pth,{method:'POST',body:JSON.stringify(rec)});return 'online'}catch(err){return 'fail'/* 11/23 온라인 실패를 따로 알림 */}}return 'local'},
   async top(d,n=10,df){let arr;if(RK.online()){try{const o=await RK.req(DIFFN[d]?`/scores/${d}.json?orderBy=%22s%22&limitToLast=${Math.max(300,n*10)}`/* 1.14.4.5 일반 모드도 위쪽 기록만 받음(실패하면 아래 catch 에서 전체) */:`/scores/${d}.json?orderBy=%22s%22&limitToLast=${Math.max(60,n*6)*(df?5:1)}`);arr=Object.values(o||{})}catch(e){try{const o=await RK.req(`/scores/${d}.json`);arr=Object.values(o||{})}catch(e2){arr=null}}}
-    if(!arr)arr=RK.local().filter(x=>x.d===d);arr=arr.filter(x=>x&&x.n&&typeof x.t==='number');if(df)arr=arr.filter(x=>(x.df||'normal')===df);/* 1.8.9.3 무한 생존·보스 러시 난이도별 */if(DIFFN[d])arr.forEach(x=>{x.s=RK.score(x)});arr.sort((a,b)=>b.s-a.s);
+    RK._loc=RK.online()&&!arr;if(!arr)arr=RK.local().filter(x=>x.d===d);arr=arr.filter(x=>x&&x.n&&typeof x.t==='number');if(df)arr=arr.filter(x=>(x.df||'normal')===df);/* 1.8.9.3 무한 생존·보스 러시 난이도별 */if(DIFFN[d])arr.forEach(x=>{x.s=RK.score(x)});arr.sort((a,b)=>b.s-a.s);
     const seen=new Set(),out=[];for(const x of arr){const k=x.u+'|'+x.h;if(seen.has(k))continue;seen.add(k);out.push(x);if(out.length>=n)break}return out},
   best(){const L=RK.local();const by={};for(const x of L){if(DIFFN[x.d])x.s=RK.score(x);if(!by[x.h]||x.s>by[x.h].s)by[x.h]=x}return by},
   // 접속/누적
@@ -5400,7 +5403,7 @@ const RK={
 };
 const DIFFN={easy:'쉬움',normal:'보통',hard:'어려움',hell:'지옥'};
 const MODEN={endless:'♾️ 무한 생존',bossrush:'👹 보스 러시'};const RKN=k=>DIFFN[k]||MODEN[k]||'';
-function rkT(x){return x.b!=null?`👹 ${x.b}마리 · ${fmt(x.rt||x.t)}`:x.w?`👑 ${fmt(x.t)}`:fmt(x.rt||x.t)}
+function rkT(x){return x.b!=null?`👹 ${x.b}마리 · ${fmt(x.rt||x.t)}`:x.w?`👑 ${fmt(x.rt||x.t)}`:fmt(x.rt||x.t)}
 const MEDAL=['🥇','🥈','🥉'];
 function rkIsMe(x){return x&&(x.u===RK.id||(typeof AU!=='undefined'&&AU.on&&x.u===AU.s.uid))}
 function rkName(x){return (RK.clean(x.n)||'익명')+(x.a?' 🎵':'')}
@@ -5411,22 +5414,22 @@ function podium(arr){const w=mk('div','pod');[1,0,2].forEach(i=>{const x=arr[i],
     const st=mk('div','ps',String(i+1));c.append(st);w.append(c)});return w}
 function noteList(arr){const ol=mk('ol','nb');for(let i=0;i<30;i++){const x=arr[i],li=mk('li',x?(rkIsMe(x)?'me':''):'blank');li.append(mk('b','nr',i<3?MEDAL[i]:String(i+1)));
     if(x){li.append(mk('span','nm',rkName(x)),mk('span','hr',rkHero(x)),mk('span','tm',rkT(x)),mk('span','kl',(x.k||0).toLocaleString()))}else li.append(mk('span','nm',''));ol.append(li)}return ol}
-async function medalTable(){const keys=Object.keys(DIFFN),tops=await Promise.all(keys.map(k=>RK.top(k,3))),P={};
-  tops.forEach((arr,di)=>arr.forEach((x,i)=>{const id=x.a?'a:'+x.u:'n:'+RK.clean(x.n);const p=P[id]||(P[id]={x,m:[0,0,0],where:[]});p.m[i]++;p.where.push(MEDAL[i]+DIFFN[keys[di]])}));
+async function medalTable(){/* 1.14.7.3 종합: 일반 모드 + 무한 생존·보스 러시의 난이도별 1~3위도 함께 셈 */const keys=[...Object.keys(DIFFN).map(k=>[k,null,DIFFN[k]]),...['endless','bossrush'].flatMap(m=>Object.keys(DIFFN).map(k=>[m,k,(m==='endless'?'♾️':'👹')+DIFFN[k]]))],tops=await Promise.all(keys.map(([m,df])=>RK.top(m,3,df))),P={};
+  tops.forEach((arr,di)=>arr.forEach((x,i)=>{const id=x.a?'a:'+x.u:'n:'+RK.clean(x.n);const p=P[id]||(P[id]={x,m:[0,0,0],where:[]});p.m[i]++;p.where.push(MEDAL[i]+keys[di][2])}));
   const rows=Object.values(P).sort((a,b)=>b.m[0]-a.m[0]||b.m[1]-a.m[1]||b.m[2]-a.m[2]);const w=mk('div','mt');
   const hd=mk('div','mr mh');['순위','닉네임','🥇','🥈','🥉','합계'].forEach(t=>hd.append(mk('span','',t)));w.append(hd);
   if(!rows.length){w.append(mk('p','empty','아직 메달 주인이 없어요. 각 난이도 1~3위가 메달을 받아요!'));return w}
   let rank=0,prev='';rows.forEach((p,i)=>{const sig=p.m.join(',');if(sig!==prev){rank=i+1;prev=sig}const r=mk('div','mr'+(rkIsMe(p.x)?' me':'')+(rank<=3?' t'+rank:''));
     const nm=mk('span','mn');nm.append(mk('b','',rkName(p.x)),mk('small','',p.where.join(' ')));r.append(mk('span','mk',String(rank)),nm,mk('span','g'+(p.m[0]?'':' z'),String(p.m[0])),mk('span','s'+(p.m[1]?'':' z'),String(p.m[1])),mk('span','bz'+(p.m[2]?'':' z'),String(p.m[2])),mk('span','tt',String(p.m[0]+p.m[1]+p.m[2])));w.append(r)});
-  w.append(mk('p','mnote','난이도마다 1위 🥇 · 2위 🥈 · 3위 🥉. 금메달 수 → 은메달 수 → 동메달 수 순서로 순위를 매겨요.'));return w}
+  w.append(mk('p','mnote','일반 모드 · 무한 생존 · 보스 러시의 난이도마다 1위 🥇 · 2위 🥈 · 3위 🥉. 금메달 수 → 은메달 수 → 동메달 수 순서로 순위를 매겨요.'));return w}
 async function showRanks(d,df){/* 1.8.9.3 명예의 전당: 모드(일반·무한 생존·보스 러시·종합) × 난이도(쉬움·보통·어려움·지옥) 두 줄 탭 */
   d=d||(MODE!=='normal'?MODE:DIFF);let mode,dk;if(d==='medal'){mode='medal';dk=df||showRanks._df||DIFF}else if(DIFFN[d]){mode='normal';dk=d}else{mode=d;dk=df||showRanks._df||DIFF}if(!DIFFN[dk])dk='normal';showRanks._m=mode;showRanks._df=dk;d=mode==='normal'?dk:mode;let dlg=$('rankDlg');if(!dlg){dlg=document.createElement('dialog');dlg.id='rankDlg';dlg.className='notes rankdlg';dlg.setAttribute('aria-label','기록');
     dlg.innerHTML=`<div class="nbody"><h2>🏆 명예의 전당 <small class="ncur" id="rkMode"></small></h2><div class="rktabs rkmodes" role="tablist" aria-label="모드"><button type="button" data-m="normal">⚔️ 일반 모드</button>${Object.keys(MODEN).map(k=>`<button type="button" data-m="${k}" class="modetab">${MODEN[k]}</button>`).join('')}<button type="button" data-m="medal" class="mtab">🏅 종합</button></div><div class="rktabs rkdiffs" role="tablist" aria-label="난이도">${Object.keys(DIFFN).map(k=>`<button type="button" data-df="${k}">${DIFFN[k]}</button>`).join('')}</div><div id="rkView"></div><h3 class="rkh">내 캐릭터별 최고 기록 <small>(이 기기)</small></h3><div class="rkbest" id="rkBest"></div></div><div class="nbtns"><button type="button" class="btn" id="rkOk">닫기</button></div>`;
     document.body.appendChild(dlg);dlg.querySelector('#rkOk').onclick=()=>dlg.close();dlg.addEventListener('click',e=>{if(e.target===dlg)dlg.close()});dlg.querySelectorAll('.rkmodes button').forEach(b=>b.onclick=()=>{const m=b.dataset.m;showRanks(m==='normal'?showRanks._df:m,showRanks._df)});dlg.querySelectorAll('.rkdiffs button').forEach(b=>b.onclick=()=>{const m=showRanks._m;showRanks(m==='normal'?b.dataset.df:m,b.dataset.df)})}
   dlg.querySelectorAll('.rkmodes button').forEach(b=>{const on=b.dataset.m===mode;b.classList.toggle('on',on);b.setAttribute('aria-selected',String(on))});dlg.querySelectorAll('.rkdiffs button').forEach(b=>{const on=b.dataset.df===dk;b.classList.toggle('on',on);b.setAttribute('aria-selected',String(on))});dlg.querySelector('.rkdiffs').hidden=mode==='medal';$('rkMode').textContent=RK.online()?'온라인 랭킹':'이 기기 기록';const V=$('rkView');V.innerHTML='<p class="empty">불러오는 중…</p>';if(!dlg.open)dlg.showModal?dlg.showModal():dlg.setAttribute('open','');
   const tok=(showRanks._t=(showRanks._t|0)+1);
-  if(d==='medal'){const t=await medalTable();if(tok!==showRanks._t)return;V.innerHTML='';V.append(mk('h3','vh','🏅 종합 메달 순위'),t)}
-  else{const arr=await RK.top(d,30,mode!=='normal'?dk:null);if(tok!==showRanks._t)return;V.innerHTML='';const tl=(mode==='normal'?'⚔️ 일반 모드':RKN(d))+' · '+DIFFN[dk];V.append(mk('h3','vh',tl+' · 시상대'),podium(arr),mk('h3','vh','📒 '+tl+' 순위 노트 · 1~30위'));const hd=mk('div','nbh');['순위','닉네임','캐릭터',d==='bossrush'?'보스 · 시간':DIFFN[d]?'기록':'버틴 시간','처치'].forEach(t=>hd.append(mk('span','',t)));V.append(hd,noteList(arr))}
+  if(d==='medal'){const t=await medalTable();if(tok!==showRanks._t)return;if(RK._loc)$('rkMode').textContent='⚠️ 온라인 연결 실패 · 이 기기 기록';V.innerHTML='';V.append(mk('h3','vh','🏅 종합 메달 순위'),t)}
+  else{const arr=await RK.top(d,30,mode!=='normal'?dk:null);if(tok!==showRanks._t)return;if(RK._loc)$('rkMode').textContent='⚠️ 온라인 연결 실패 · 이 기기 기록';V.innerHTML='';const tl=(mode==='normal'?'⚔️ 일반 모드':RKN(d))+' · '+DIFFN[dk];V.append(mk('h3','vh',tl+' · 시상대'),podium(arr),mk('h3','vh','📒 '+tl+' 순위 노트 · 1~30위'));const hd=mk('div','nbh');['순위','닉네임','캐릭터',d==='bossrush'?'보스 · 시간':DIFFN[d]?'기록':'버틴 시간','처치'].forEach(t=>hd.append(mk('span','',t)));V.append(hd,noteList(arr))}
   const B=RK.best(),ks=Object.keys(B).sort((a,b)=>B[b].s-B[a].s);$('rkBest').innerHTML=ks.length?'':'<p class="empty">아직 플레이 기록이 없어요.</p>';
   for(const k of ks){const x=B[k],el=document.createElement('div');el.className='bc';el.innerHTML=`<b></b><span>${rkT(x)} · ${RKN(x.d)}${MODEN[x.d]&&DIFFN[x.df]?' '+DIFFN[x.df]:''}</span>`;el.querySelector('b').textContent=ROSTER[k]?ROSTER[k].name:k;if(ROSTER[k]&&ROSTER[k].v){const v=document.createElement('i');v.textContent=ROSTER[k].v;v.style.cssText='font-style:normal;font-size:10px;opacity:.75';el.insertBefore(v,el.querySelector('span'))}$('rkBest').appendChild(el)}}
 // 타이틀: 접속 표시 + 기록 버튼
@@ -5437,9 +5440,9 @@ async function showRanks(d,df){/* 1.8.9.3 명예의 전당: 모드(일반·무�
   addEventListener('pagehide',()=>{if(!RK.canPing())return;try{fetch(FB_URL.replace(/\/$/,'')+RK.onlinePath(),{method:'DELETE',keepalive:true}).catch(()=>{})}catch(e){}})})();
 // 결과 화면: 닉네임 + 기록 남기기
 (function(){const p=$('endOv')&&$('endOv').querySelector('.btns');if(!p)return;const box=document.createElement('div');box.className='rksub';box.innerHTML=`<div class="rkhd"><span>📝 기록 남기기</span><button class="rklink" id="rkSee" type="button">🏆 순위 보기 ›</button></div><div class="rkrow"><input id="rkNick" maxlength="12" placeholder="닉네임 (12자)" autocomplete="nickname" aria-label="닉네임"><button class="btn" id="rkSend" type="button">등록</button></div><p class="rkmsg" id="rkMsg" role="status"></p>`;p.insertAdjacentElement('beforebegin',box);p.classList.add('endbtns');
-  $('rkNick').value=RK.nick();window.rkReset=()=>{$('rkSend').disabled=false;const on=typeof AU!=='undefined'&&AU.on;$('rkNick').readOnly=on;$('rkNick').classList.toggle('lock',on);$('rkNick').value=on?AU.name():(RK.nick()||(typeof AU!=='undefined'?AU.guest().n:''));$('rkMsg').textContent=on?'🎵 계정 기록으로 올라가요 (닉네임 옆 🎵 표시).':RK.online()?'🕹️ 게스트 기록이에요. 닉네임을 적고 등록하세요.':'닉네임을 적고 기록을 남겨 보세요.'};$('rkSee').onclick=()=>showRanks(G&&G.mode&&G.mode!=='normal'?G.mode:DIFF,DIFF);
-  $('rkSend').onclick=async()=>{const acc=typeof AU!=='undefined'&&AU.on;const n=acc?AU.name():RK.clean($('rkNick').value);if(!n){$('rkMsg').textContent='닉네임을 입력해 주세요.';$('rkNick').focus();return}if(!acc)RK.setNick(n);if(!G||G._rkSent){$('rkMsg').textContent='이미 기록했어요.';return}G._rkSent=1;
-    const e={n,h:G.heroId==='damirof'?G.skin:G.heroId/* 1.14.7.2 공구 스킨 기록 */,t:Math.min(900,Math.floor(G.t))/* 1.14.4.6 서버 규칙 t<=900: 일반 모드 15분 넘긴 기록도 온라인에 올라가게 */,k:G.kills,lv:G.lv,d:DIFF,w:G.won?1:0};if(G.mode!=='normal'){e.d=G.mode;e.df=DIFF;e.rt=Math.floor(G.t);e.t=Math.min(900,e.rt);if(G.mode==='bossrush')e.b=G.bk;else e.bk=G.bk}if(acc){e.u=AU.s.uid;e.a=1}e.s=G.mode==='bossrush'?G.bk*100000+Math.max(0,99999-e.rt):G.mode==='endless'?e.rt*100+Math.min(99,Math.floor(e.k/50)):RK.score(e);$('rkSend').disabled=true;const r=await RK.submit(e);$('rkMsg').textContent=r==='online'?'온라인 랭킹에 올렸어요! 🎉':'이 기기에 기록했어요. (온라인 랭킹은 준비 중)';showRanks(G.mode!=='normal'?G.mode:DIFF,DIFF)}})();
+  $('rkNick').value=RK.nick();window.rkReset=()=>{$('rkSend').disabled=false;$('rkSend').textContent='등록';const on=typeof AU!=='undefined'&&AU.on;$('rkNick').readOnly=on;$('rkNick').classList.toggle('lock',on);$('rkNick').value=on?AU.name():(RK.nick()||(typeof AU!=='undefined'?AU.guest().n:''));$('rkMsg').textContent=on?'🎵 계정 기록으로 올라가요 (닉네임 옆 🎵 표시).':RK.online()?'🕹️ 게스트 기록이에요. 닉네임을 적고 등록하세요.':'닉네임을 적고 기록을 남겨 보세요.'};$('rkSee').onclick=()=>showRanks(G&&G.mode&&G.mode!=='normal'?G.mode:DIFF,DIFF);
+  $('rkSend').onclick=async()=>{if(G&&G._rkFail){/* 11/23 온라인 등록 실패 → 같은 기록 다시 올리기(이 기기 저장은 한 번만) */$('rkSend').disabled=true;$('rkMsg').textContent='다시 올리는 중…';const r=await RK.submit(G._rkFail,1);if(r==='online'){G._rkFail=null;$('rkSend').textContent='등록';$('rkMsg').textContent='온라인 랭킹에 올렸어요! 🎉';showRanks(G.mode!=='normal'?G.mode:DIFF,DIFF)}else{$('rkSend').disabled=false;$('rkMsg').textContent='⚠️ 이번에도 못 올렸어요. 인터넷 연결을 확인하고 다시 눌러 주세요.'}return}const acc=typeof AU!=='undefined'&&AU.on;const n=acc?AU.name():RK.clean($('rkNick').value);if(!n){$('rkMsg').textContent='닉네임을 입력해 주세요.';$('rkNick').focus();return}if(!acc)RK.setNick(n);if(!G||G._rkSent){$('rkMsg').textContent='이미 기록했어요.';return}G._rkSent=1;
+    const e={n,h:G.heroId==='damirof'?G.skin:G.heroId/* 1.14.7.2 공구 스킨 기록 */,t:Math.min(900,Math.floor(G.t))/* 1.14.4.6 서버 규칙 t<=900: 일반 모드 15분 넘긴 기록도 온라인에 올라가게 */,k:G.kills,lv:G.lv,d:DIFF,w:G.won?1:0};if(G.mode==='normal'&&G.t>=900)e.rt=Math.floor(G.t)/* 11/23 일반 모드 15분 넘긴 판: 실제 시간 */;if(G.mode!=='normal'){e.d=G.mode;e.df=DIFF;e.rt=Math.floor(G.t);e.t=Math.min(900,e.rt);if(G.mode==='bossrush')e.b=G.bk;else e.bk=G.bk}if(acc){e.u=AU.s.uid;e.a=1}e.s=G.mode==='bossrush'?G.bk*100000+Math.max(0,99999-e.rt):G.mode==='endless'?e.rt*100+Math.min(99,Math.floor(e.k/50)):RK.score(e);$('rkSend').disabled=true;const r=await RK.submit(e);if(r==='fail'){G._rkFail=e;$('rkSend').disabled=false;$('rkSend').textContent='다시 올리기';$('rkMsg').textContent='⚠️ 온라인 등록에 실패했어요 (이 기기에는 저장됨). 「다시 올리기」를 눌러 주세요.';return}$('rkMsg').textContent=r==='online'?'온라인 랭킹에 올렸어요! 🎉':'이 기기에 기록했어요.';showRanks(G.mode!=='normal'?G.mode:DIFF,DIFF)}})();
 
 /* ===================== v52 : 계정(닉네임 + 숫자 비번: 새로 만들 땐 6~16자리, 옛 계정은 4자리도 로그인) / 게스트 =====================
    Firebase Authentication(이메일/비밀번호)을 REST로 사용. 화면에는 닉네임·PIN만 보이고
@@ -5831,7 +5834,7 @@ function showGal(){let d=$('galDlg');if(!d){d=document.createElement('dialog');d
 (function(){const row=document.querySelector('.topbtns');if(!row)return;const gb=document.createElement('button');gb.type='button';gb.id='galBtn';gb.className='notesbtn';gb.textContent='🖼️ 일러스트';gb.onclick=()=>showGal();row.append(gb)})();
 (function(){const row=document.querySelector('.topbtns');if(!row)return;const ab=document.createElement('button');ab.type='button';ab.id='achBtn';ab.className='notesbtn';ab.textContent='🏆 업적';ab.onclick=()=>showAch();row.append(ab);achBadge();setInterval(()=>{const o=$('titleOv');if(!document.hidden&&o&&!o.hidden)achBadge()},4000)/* 게임 중엔 안 돎 */})();
 /* 1.13.16.5 새 버전 알림: GitHub 페이지에서만, 작은 version.json을 3분마다(그리고 탭으로 돌아올 때) 확인해 이 화면보다 새 빌드가 있으면 처음 화면에 「새로고침」 띠를 띄움. 게임 중엔 안 띄우고 처음 화면으로 돌아오면 보여 줌 */
-const BUILD='20261123163155';
+const BUILD='20261123163803';
 /* 1.13.16.15 앱(PWA) · 1.13.16.16 버튼 항상 보이게: GitHub 주소면 서비스워커 등록 + 「📲 앱으로 설치」(크롬은 설치 창, 없으면 메뉴 안내, 아이폰은 Safari 공유 → 홈 화면에 추가 안내).
    카카오톡·네이버 등 앱 안 브라우저면 크롬(외부 브라우저)으로 열어 줌. Claude 페이지 등 다른 주소면 GitHub 주소를 새 창으로 열어 줌. 이미 앱으로 열었으면 버튼 없음 */
 (function(){const GH='https://vnfms3346-alt.github.io/beatblade/';const onGH=/github\.io$/.test(location.hostname);
