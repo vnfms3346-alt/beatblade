@@ -4551,6 +4551,7 @@ buildPicks(id=>{const k=KIT(id),w=WEAP[HERO[k][0]];/* 1.9.6.0 카드엔 무기 �
 /* ---------- update notes popup ---------- */
 const NOTES_VER='2026-11-23-1.14.7.5';
 const NOTES=[
+  ["11월 24일","1.14.7.6","필살기 컷인 오류 긴급 수정",["🚑 일부 캐릭터 필살기 컷인에서 게임이 멈추던 오류 고침"]],
   ["11월 23일","1.14.7.5","가희 현대판 새 오프닝",["봄 벚꽃비와 겨울 장검 장면이 이어지는 새 오프닝"]],
   ["11월 23일 17:30","1.14.7.4","종합 메달 정리",["🏅 종합 메달: 같은 사람의 계정·게스트 기록을 한 줄로 합쳐서 셈"]],
   ["11월 23일 17:00","1.14.7.3","랭킹 점검 · 다미로 공구 수정",["🏆 일반 모드에서 15분 넘긴 판도 실제 시간으로 순위·표시","🔁 온라인 기록 등록이 실패하면 알려 주고 「다시 올리기」 가능","⚠️ 순위를 못 불러오면 「온라인 연결 실패 · 이 기기 기록」으로 표시","🏅 종합 메달에 무한 생존 · 보스 러시 순위도 포함","🔧 다미로 공구: 렌치 동작 방향 유지 · 스킨별 기록 · 필살기 이름 표시"]],
@@ -4582,7 +4583,7 @@ function showNotes(){let d=document.getElementById('notesDlg');if(!d){d=document
     d.innerHTML=`<div class="nbody">${NOTES_HTML}</div><div class="nbtns"><button type="button" class="btn" id="notesOk">확인</button></div>`;document.body.appendChild(d);
     const close=()=>{try{localStorage.setItem('bb_notes_seen',NOTES_VER)}catch(e){}d.close()};d.querySelector('#notesOk').onclick=close;d.addEventListener('cancel',()=>{try{localStorage.setItem('bb_notes_seen',NOTES_VER)}catch(e){}});d.addEventListener('click',e=>{if(e.target===d)close()})}
   if(!d.open){if(d.showModal)d.showModal();else d.setAttribute('open','')}d.querySelector('#notesOk').focus()}
-(function(){const st=document.getElementById('settings');if(st&&!document.getElementById('notesBtn')){const b=document.createElement('button');b.type='button';b.id='notesBtn';b.className='notesbtn';b.textContent='업데이트 소식 · v1.14.7.5';b.onclick=showNotes;st.insertAdjacentElement('afterend',b)}
+(function(){const st=document.getElementById('settings');if(st&&!document.getElementById('notesBtn')){const b=document.createElement('button');b.type='button';b.id='notesBtn';b.className='notesbtn';b.textContent='업데이트 소식 · v1.14.7.6';b.onclick=showNotes;st.insertAdjacentElement('afterend',b)}
   let seen='';try{seen=localStorage.getItem('bb_notes_seen')||''}catch(e){}if(!seen){try{localStorage.setItem('bb_notes_seen',NOTES_VER)}catch(e){}}else if(seen!==NOTES_VER)SPLASH_DONE.then(()=>setTimeout(showNotes,300))})();
 var PICK_SEL=null;/* var: buildPicks 가 이 줄보다 먼저 불려도 오류 없게 */
 function roPart(s){if(!s)return'(으)로';const c=s.charCodeAt(s.length-1);if(c>=0xAC00&&c<=0xD7A3){const j=(c-0xAC00)%28;return(j===0||j===8)?'로':'으로'}return'(으)로'}
@@ -4847,7 +4848,7 @@ function clearCut(){
   INCUT=false;document.body.classList.remove('incut');
 }
 function drawCutGif(c,t){const g=CUTGIF[c.gif],col=HC[c.id]||'#ffffff',k=H/540,cl=(x,a,b)=>Math.max(a,Math.min(b,x)),ease=x=>x*x;
-  const nameAt=(x,y,fs,al,rot)=>{ctx.save();ctx.translate(x,y);ctx.rotate(rot);ctx.globalAlpha=al;ctx.textAlign='center';ctx.textBaseline='middle';ctx.font=`800 ${fs}px ${FD}`;ctx.lineJoin='round';ctx.lineWidth=fs*.22;ctx.strokeStyle='rgba(6,6,12,.92)';ctx.strokeText(c.name,0,0);ctx.lineWidth=fs*.09;ctx.strokeStyle=rgba(col,.95);ctx.strokeText(c.name,0,0);ctx.fillStyle='#ffffff';ctx.fillText(c.name,0,0);if(g.en){/* 1.13.16.14 영문 기술명(세레나 LUNAR SLASH) — 이름 위에 은빛 자간 넓게 */ctx.save();ctx.font=`900 ${Math.round(fs*.42)}px ${FD}`;try{ctx.letterSpacing=Math.round(fs*.12)+'px'}catch(_){}ctx.lineWidth=fs*.09;ctx.strokeStyle='rgba(6,6,12,.9)';ctx.strokeText(g.en,0,-fs*.78);ctx.fillStyle='#d8e6ff';ctx.fillText(g.en,0,-fs*.78);ctx.restore()}ctx.font=`800 ${Math.round(fs*.38)}px ${FN}`;ctx.lineWidth=fs*.16;ctx.strokeStyle='rgba(6,6,12,.95)';/* 1.14.7.2 공구 스킨 이름 표시 */ctx.strokeText(caption,0,fs*.86);ctx.fillStyle='#fff4d6';ctx.fillText(caption,0,fs*.86);/* 1.14.6.5 잘 보이게: 크게·굵게·검은 테두리 */ctx.restore();ctx.globalAlpha=1};
+  const nameAt=(x,y,fs,al,rot)=>{ctx.save();ctx.translate(x,y);ctx.rotate(rot);ctx.globalAlpha=al;ctx.textAlign='center';ctx.textBaseline='middle';ctx.font=`800 ${fs}px ${FD}`;ctx.lineJoin='round';ctx.lineWidth=fs*.22;ctx.strokeStyle='rgba(6,6,12,.92)';ctx.strokeText(c.name,0,0);ctx.lineWidth=fs*.09;ctx.strokeStyle=rgba(col,.95);ctx.strokeText(c.name,0,0);ctx.fillStyle='#ffffff';ctx.fillText(c.name,0,0);if(g.en){/* 1.13.16.14 영문 기술명(세레나 LUNAR SLASH) — 이름 위에 은빛 자간 넓게 */ctx.save();ctx.font=`900 ${Math.round(fs*.42)}px ${FD}`;try{ctx.letterSpacing=Math.round(fs*.12)+'px'}catch(_){}ctx.lineWidth=fs*.09;ctx.strokeStyle='rgba(6,6,12,.9)';ctx.strokeText(g.en,0,-fs*.78);ctx.fillStyle='#d8e6ff';ctx.fillText(g.en,0,-fs*.78);ctx.restore()}ctx.font=`800 ${Math.round(fs*.38)}px ${FN}`;ctx.lineWidth=fs*.16;ctx.strokeStyle='rgba(6,6,12,.95)';/* 1.14.7.2 공구 스킨 이름 표시 */{const caption=RN(cutSkin(c.id))+'  ·  필살기';/* 1.14.7.6 caption 정의 빠져 컷인 멈춤 고침 */ctx.strokeText(caption,0,fs*.86);ctx.fillStyle='#fff4d6';ctx.fillText(caption,0,fs*.86)}/* 1.14.6.5 잘 보이게: 크게·굵게·검은 테두리 */ctx.restore();ctx.globalAlpha=1};
   const flash=a=>{if(a>0){ctx.fillStyle=`rgba(255,250,235,${a})`;ctx.fillRect(0,0,W,H)}};
   if(g.mode==='vid'){/* 1.13.16.8 영상 필살기 컷인(다미로 경화수월 · 세레나). 영상은 미리 속도를 당기고 늦춰 박자감 있게 편집(전반은 빠르게, 칼을 뽑고 빛이 터지는 순간은 천천히). 화면 위 효과는 영상 시간표에 맞춤: beats=두근(확대·흔들림·번쩍임·집중선), burst=빛 폭발(색 섬광·충격파·빛줄기), 끝나면 살짝 커지며 사라짐 */
     const v=cgV(g.v,2),T=g.T,vOk=v&&(c.videoFallback||c.videoStarted&&!v.seeking&&!(v.ended&&t<T-.2))/* 1.14.6.22 되감기 전·중의 지난 영상 마지막 장면은 안 그림 */,c2=g.c2||col,tIn=cl(t/.16,0,1),tOut=cl((t-T)/.2,0,1),bk=x=>{const c1=1.70158,c3=c1+1;return 1+c3*Math.pow(x-1,3)+c1*Math.pow(x-1,2)};
@@ -5838,7 +5839,7 @@ function showGal(){let d=$('galDlg');if(!d){d=document.createElement('dialog');d
 (function(){const row=document.querySelector('.topbtns');if(!row)return;const gb=document.createElement('button');gb.type='button';gb.id='galBtn';gb.className='notesbtn';gb.textContent='🖼️ 일러스트';gb.onclick=()=>showGal();row.append(gb)})();
 (function(){const row=document.querySelector('.topbtns');if(!row)return;const ab=document.createElement('button');ab.type='button';ab.id='achBtn';ab.className='notesbtn';ab.textContent='🏆 업적';ab.onclick=()=>showAch();row.append(ab);achBadge();setInterval(()=>{const o=$('titleOv');if(!document.hidden&&o&&!o.hidden)achBadge()},4000)/* 게임 중엔 안 돎 */})();
 /* 1.13.16.5 새 버전 알림: GitHub 페이지에서만, 작은 version.json을 3분마다(그리고 탭으로 돌아올 때) 확인해 이 화면보다 새 빌드가 있으면 처음 화면에 「새로고침」 띠를 띄움. 게임 중엔 안 띄우고 처음 화면으로 돌아오면 보여 줌 */
-const BUILD='20261123175518';
+const BUILD='20261124153551';
 /* 1.13.16.15 앱(PWA) · 1.13.16.16 버튼 항상 보이게: GitHub 주소면 서비스워커 등록 + 「📲 앱으로 설치」(크롬은 설치 창, 없으면 메뉴 안내, 아이폰은 Safari 공유 → 홈 화면에 추가 안내).
    카카오톡·네이버 등 앱 안 브라우저면 크롬(외부 브라우저)으로 열어 줌. Claude 페이지 등 다른 주소면 GitHub 주소를 새 창으로 열어 줌. 이미 앱으로 열었으면 버튼 없음 */
 (function(){const GH='https://vnfms3346-alt.github.io/beatblade/';const onGH=/github\.io$/.test(location.hostname);
