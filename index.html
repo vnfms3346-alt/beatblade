@@ -488,7 +488,7 @@ dialog.notes{background:linear-gradient(180deg,#e6d8bd,#d9c8a8);border:1px solid
 #titleOv .ttlparade{position:relative;overflow:hidden;height:96px;margin:-2px -16px 0;-webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}
 #titleOv .ttlparade::after{content:"";position:absolute;left:0;right:0;bottom:6px;height:2px;background:linear-gradient(90deg,transparent,#e8b46a 20%,#ffe2a8 50%,#e8b46a 80%,transparent);opacity:.7}
 #titleOv .tp-track{display:flex;align-items:flex-end;gap:14px;width:max-content;height:100%;padding-bottom:6px;animation:ttlParade calc(var(--n) * 2.2s) linear infinite}
-#titleOv .tp-track i{flex:none;background-image:url(assets/sprites/portraits.webp?v=8);background-repeat:no-repeat;filter:drop-shadow(0 3px 2px rgba(0,0,0,.55));animation:ttlHop .968s cubic-bezier(.3,.7,.4,1) infinite;animation-delay:var(--d)}
+#titleOv .tp-track i{flex:none;background-image:url(assets/sprites/portraits.webp?v=9);background-repeat:no-repeat;filter:drop-shadow(0 3px 2px rgba(0,0,0,.55));animation:ttlHop .968s cubic-bezier(.3,.7,.4,1) infinite;animation-delay:var(--d)}
 @keyframes ttlParade{to{transform:translateX(-50%)}}
 @keyframes ttlHop{0%,100%{transform:translateY(0)}18%{transform:translateY(-6px)}36%{transform:translateY(0)}}
 #titleOv .ttlparade:hover .tp-track{animation-play-state:paused}
@@ -714,10 +714,10 @@ window.SPLASH_DONE=new Promise(res=>{const sp=document.getElementById('splash');
   img.addEventListener(vid?'loadedmetadata':'load',measure);addEventListener('resize',measure);
   if(vid){
     const key='beatblade-last-opening';
-    let opening=9;/* 1.14.6.23 오프닝7과 같은 구성, 봄·겨울 원화만 내그림체판(공지 폴더)으로 *//* 1.14.6.15 가희 오프닝: 봄→겨울→얼굴 5컷→겨울→대일섬→밝아짐 */ /* 1.14.6.9 가희 현대판 오프닝만 (5번 전투 오프닝은 사용자 요청으로 뺌) */
+    let opening=10;/* 2026-11-24 오프닝10: AI 영상 구간 없이 고해상도 원화(1280×720)로 다시 만든 판 *//* 1.14.6.23 오프닝7과 같은 구성, 봄·겨울 원화만 내그림체판(공지 폴더)으로 *//* 1.14.6.15 가희 오프닝: 봄→겨울→얼굴 5컷→겨울→대일섬→밝아짐 */ /* 1.14.6.9 가희 현대판 오프닝만 (5번 전투 오프닝은 사용자 요청으로 뺌) */
     try{localStorage.setItem(key,String(opening))}catch(_){}
     const poster='assets/opening_first'+opening+'.webp?v='+(opening==6?3:1);/* 1.14.6.8 첫 화면 그림도 버전 번호(예전 그림이 저장본에서 나오지 않게) */
-    if(opening>=6&&opening<=9){
+    if(opening>=6&&opening<=10){
       sp.style.setProperty('--sp-focus',opening>=7?'72%':'58%');
       sp.style.setProperty('--sp-focus-phone','76%');
     }
@@ -752,7 +752,7 @@ function tint(at,k){if(!at[k]){const[c,a,sc]=TINT[k];at[k]=tinted(at.base,c(),a,
 /* v1.8.4.4 최적화: 캐릭터 그림(아틀라스 60장, 약 18MB)을 처음부터 다 받지 않고, 필요할 때 받음.
    캐릭터 선택 화면 초상화는 한 장짜리 초상화 모음(portraits.webp)으로 그림 */
 const ATLQ={};function needAtl(id){if(ATL[id]||ATLQ[id]||!SPR[id])return;ATLQ[id]=1;const im=new Image();im.onload=()=>{ATL[id]={base:im};if(!PORT_IM.complete||!PORT[id])drawPortraits()};im.onerror=()=>{ATLQ[id]=0};im.src=SPR[id].atlas}
-const PORT={"nid":[0,0,150,228],"nidB":[0,1824,157,228],"damiroK":[160,1824,146,228],"knight":[200,0,127,228],"elf":[400,0,166,228],"princess":[600,0,174,228],"violet":[800,0,147,228],"lion":[1000,0,146,228],"devil":[1200,0,148,228],"angel":[1400,0,175,228],"sleepy":[400,228,141,228],"glasses":[600,228,143,228],"yeon":[800,228,131,228],"bunny":[1000,228,121,228],"bunnym":[1200,228,109,228],"damiro":[1400,228,125,228],"pinkbunny":[0,456,116,228],"lumen":[200,456,161,228],"kamil":[400,456,159,228],"coffee":[600,456,129,228],"redpony":[800,456,135,228],"blonde":[1000,456,123,228],"gymgl":[1200,456,111,228],"deer":[1400,456,163,228],"sage":[0,684,161,228],"wingcat":[200,684,200,217],"vest":[400,684,121,228],"guitar":[600,684,161,228],"graygl":[800,684,147,228],"violetR":[1000,684,188,228],"idaxe":[1200,684,179,228],"damirof":[0,912,130,228],"damirom":[200,912,137,228],"yue":[400,912,138,228],"saurisP":[600,912,146,228],"saurisG":[800,912,144,228],"seolM":[1000,912,137,228],"seolF":[1200,912,154,228],"suryeo":[1400,912,175,228],"hanbyul":[0,1140,150,228],"santa":[200,1140,126,228],"glassesB":[400,1140,138,228],"korea":[600,1140,186,228],"yuenem":[800,1140,150,228],"fm_bat":[1000,1140,200,144],"fm_ankle":[1200,1140,200,199],"fm_horn":[1400,1140,200,158],"fm_apple":[0,1368,195,228],"fm_candy":[200,1368,200,220],"fm_slime":[400,1368,200,157],"fm_ham":[600,1368,200,214],"fm_hamdra":[800,1368,167,228],"fm_mint":[400,1824,200,164],"fm_fluff":[600,1824,200,181],"fm_jelly":[800,1824,200,197],"fm_candle":[1000,1824,200,225],"fm_doll":[1200,1824,200,185],"nobu":[1000,1368,143,228],"idtrip":[1200,1368,165,228],"kate":[1400,1368,118,228],"nobu2":[0,1596,136,228],"nobu3":[200,1596,143,228],"cmong":[400,1596,131,228],"ruby":[600,1596,108,228],"marjanam":[800,1596,147,228],"marjanao":[1000,1596,137,228],"gahee":[1200,1596,196,228],"violetB":[1400,1596,129,228]};const PORT_IM=new Image();PORT_IM.onload=()=>drawPortraits();PORT_IM.src='assets/sprites/portraits.webp?v=8';
+const PORT={"nid":[0,0,150,228],"nidB":[0,1824,157,228],"damiroK":[160,1824,146,228],"knight":[200,0,127,228],"elf":[400,0,166,228],"princess":[600,0,174,228],"violet":[800,0,147,228],"lion":[1000,0,146,228],"devil":[1200,0,148,228],"angel":[1400,0,175,228],"sleepy":[400,228,141,228],"glasses":[600,228,143,228],"yeon":[800,228,131,228],"bunny":[1000,228,121,228],"bunnym":[1200,228,109,228],"damiro":[1400,228,125,228],"pinkbunny":[0,456,116,228],"lumen":[200,456,161,228],"kamil":[400,456,159,228],"coffee":[600,456,129,228],"redpony":[800,456,135,228],"blonde":[1000,456,123,228],"gymgl":[1200,456,111,228],"deer":[1400,456,163,228],"sage":[0,684,161,228],"wingcat":[200,684,200,217],"vest":[400,684,121,228],"guitar":[600,684,161,228],"graygl":[800,684,147,228],"violetR":[1000,684,188,228],"idaxe":[1200,684,179,228],"damirof":[0,912,130,228],"damirom":[200,912,137,228],"yue":[400,912,138,228],"saurisP":[600,912,146,228],"saurisG":[800,912,144,228],"seolM":[1000,912,137,228],"seolF":[1200,912,154,228],"suryeo":[1400,912,175,228],"hanbyul":[0,1140,150,228],"santa":[200,1140,126,228],"glassesB":[400,1140,138,228],"korea":[600,1140,186,228],"yuenem":[800,1140,150,228],"fm_bat":[1000,1140,200,144],"fm_ankle":[1200,1140,200,199],"fm_horn":[1400,1140,200,158],"fm_apple":[0,1368,195,228],"fm_candy":[200,1368,200,220],"fm_slime":[400,1368,200,157],"fm_ham":[600,1368,200,214],"fm_hamdra":[800,1368,167,228],"fm_mint":[400,1824,200,164],"fm_fluff":[600,1824,200,181],"fm_jelly":[800,1824,200,197],"fm_candle":[1000,1824,200,225],"fm_doll":[1200,1824,200,185],"nobu":[1000,1368,143,228],"idtrip":[1200,1368,165,228],"kate":[1400,1368,118,228],"nobu2":[0,1596,136,228],"nobu3":[200,1596,143,228],"cmong":[400,1596,131,228],"ruby":[600,1596,108,228],"marjanam":[800,1596,147,228],"marjanao":[1000,1596,137,228],"gahee":[1200,1596,196,228],"violetB":[1400,1596,129,228]};const PORT_IM=new Image();PORT_IM.onload=()=>drawPortraits();PORT_IM.src='assets/sprites/portraits.webp?v=9';
 function preloadAtl(ids){for(const id of ids)needAtl(id)}
 const FACE_L={fm_hamdra:1,fm_candy:1}; // 그림 자체가 왼쪽을 보는 몬스터
 const SPRC=[];let SPRU=0,SPRB=0;/* 1.9.8.0 SPRB: 이번 프레임에 새로 만든 조각 수 (한 프레임에 많이 만들면 끊김 → 4개 넘으면 원본에서 바로 그림) */
@@ -979,7 +979,7 @@ function syncSnd(){const sv=document.getElementById('sndVol');if(!sv)return;if(!
   sv.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.v===VOL)));
   for(const[id,get,set,key]of[['sndMus',()=>MUSV,v=>MUSV=v,'bb_vol_mus'],['sndSfx',()=>SFXV,v=>SFXV=v,'bb_vol_sfx']]){const r=document.getElementById(id),o=document.getElementById(id+'V');if(!r)continue;r.value=Math.round(get()*100);o.textContent=Math.round(get()*100)+'%';const off=VOL==='off';r.disabled=off;r.style.opacity=off?.45:1;
     r.oninput=()=>{const v=r.value/100;set(v);o.textContent=r.value+'%';applyVol()};r.onchange=()=>{try{localStorage.setItem(key,String(get()))}catch(e){}if(id==='sndSfx'&&typeof sfx!=='undefined'&&ac)try{sfx.pop(ac.currentTime)}catch(e){}}}}
-function buildSettings(){const box=$('settings');if(!box)return;const groups=[['모드',Object.keys(MODES).map(k=>[k,MODES[k].ic+' '+MODES[k].name]),MODE,k=>{MODE=k;try{localStorage.setItem('bb_mode',k)}catch(e){}}],['난이도',DIFF_KEYS.map(k=>[k,DIFF_INFO[k].name]),DIFF,k=>{DIFF=k;try{localStorage.setItem('bb_diff_surv',k)}catch(e){}if(typeof MAPS!=='undefined')loadMap(DIFF_MAP[k])}],
+function buildSettings(){const box=$('settings');if(!box)return;const groups=[['모드',Object.keys(MODES).map(k=>[k,MODES[k].ic+' '+MODES[k].name]),MODE,k=>{MODE=k;try{localStorage.setItem('bb_mode',k)}catch(e){}}],['난이도',DIFF_KEYS.map(k=>[k,DIFF_INFO[k].name]),DIFF,k=>{DIFF=k;try{localStorage.setItem('bb_diff_surv',k)}catch(e){}if(typeof MAPS!=='undefined')loadMap(DIFF_MAP[k],true)}],
     ['그래픽',[['auto','자동'],['high','선명하게'],['low','가볍게']],QUAL,k=>setQual(k)],
     ['소리',[['on','켜기'],['low','작게'],['off','끄기']],VOL,k=>{VOL=k;try{localStorage.setItem('bb_surv_vol',k)}catch(e){}applyVol()}],
     ['배경음악',[['track','새 BGM'],['synth','기본 연주']],BGM,k=>{BGM=k;try{localStorage.setItem('bb_bgm',k)}catch(e){}}]];
@@ -4549,8 +4549,9 @@ $('retryBtn').onclick=()=>{const h=G.skin||G.heroId;stopMusic();newGame(h)};
 buildPicks(id=>{const k=KIT(id),w=WEAP[HERO[k][0]];/* 1.9.6.0 카드엔 무기 이름·체력·속도만, 자세한 건 툴팁 */return`<span class="pt">${w.ic||''} ${w.name}</span><span class="ps">❤ ${HERO[k][1]} · 👟 ${HERO[k][2]}</span>`});
 
 /* ---------- update notes popup ---------- */
-const NOTES_VER='2026-11-23-1.14.7.5';
+const NOTES_VER='2026-11-24-최적화';
 const NOTES=[
+  ["11월 24일","1.14.7.7","최적화·오류 점검",["전투 중 입자·피해 숫자 처리와 화면 밖 소품 그리기를 줄였어요","첫 화면용 그림을 줄이고 전투용 지형은 판을 시작할 때 불러와요","키보드 일시정지와 모바일 자동 그래픽 품질 복구를 고쳤어요"]],
   ["11월 24일","1.14.7.6","필살기 컷인 오류 긴급 수정",["🚑 일부 캐릭터 필살기 컷인에서 게임이 멈추던 오류 고침"]],
   ["11월 23일","1.14.7.5","가희 현대판 새 오프닝",["봄 벚꽃비와 겨울 장검 장면이 이어지는 새 오프닝"]],
   ["11월 23일 17:30","1.14.7.4","종합 메달 정리",["🏅 종합 메달: 같은 사람의 계정·게스트 기록을 한 줄로 합쳐서 셈"]],
@@ -4583,7 +4584,7 @@ function showNotes(){let d=document.getElementById('notesDlg');if(!d){d=document
     d.innerHTML=`<div class="nbody">${NOTES_HTML}</div><div class="nbtns"><button type="button" class="btn" id="notesOk">확인</button></div>`;document.body.appendChild(d);
     const close=()=>{try{localStorage.setItem('bb_notes_seen',NOTES_VER)}catch(e){}d.close()};d.querySelector('#notesOk').onclick=close;d.addEventListener('cancel',()=>{try{localStorage.setItem('bb_notes_seen',NOTES_VER)}catch(e){}});d.addEventListener('click',e=>{if(e.target===d)close()})}
   if(!d.open){if(d.showModal)d.showModal();else d.setAttribute('open','')}d.querySelector('#notesOk').focus()}
-(function(){const st=document.getElementById('settings');if(st&&!document.getElementById('notesBtn')){const b=document.createElement('button');b.type='button';b.id='notesBtn';b.className='notesbtn';b.textContent='업데이트 소식 · v1.14.7.6';b.onclick=showNotes;st.insertAdjacentElement('afterend',b)}
+(function(){const st=document.getElementById('settings');if(st&&!document.getElementById('notesBtn')){const b=document.createElement('button');b.type='button';b.id='notesBtn';b.className='notesbtn';b.textContent='업데이트 소식 · v1.14.7.7';b.onclick=showNotes;st.insertAdjacentElement('afterend',b)}
   let seen='';try{seen=localStorage.getItem('bb_notes_seen')||''}catch(e){}if(!seen){try{localStorage.setItem('bb_notes_seen',NOTES_VER)}catch(e){}}else if(seen!==NOTES_VER)SPLASH_DONE.then(()=>setTimeout(showNotes,300))})();
 var PICK_SEL=null;/* var: buildPicks 가 이 줄보다 먼저 불려도 오류 없게 */
 function roPart(s){if(!s)return'(으)로';const c=s.charCodeAt(s.length-1);if(c>=0xAC00&&c<=0xD7A3){const j=(c-0xAC00)%28;return(j===0||j===8)?'로':'으로'}return'(으)로'}
@@ -4643,8 +4644,8 @@ function emit(x,y,n,o={}){
   const pcap=LOWFX?(MOBILE?120:180):(MOBILE?260:RS<.8?320:520);for(let i=0;i<n&&G.parts.length<pcap;i++){const a=(o.a??Math.random()*Math.PI*2)+(Math.random()-.5)*(o.spread??Math.PI*2),sp=(o.sp??120)*(.4+Math.random()*.8);
     G.parts.push({x:x+(Math.random()-.5)*(o.jit??0),y:y+(Math.random()-.5)*(o.jit??0),vx:Math.cos(a)*sp,vy:Math.sin(a)*sp-(o.up??0),g:o.g??0,drag:o.drag??2.2,t:0,life:(o.life??.6)*(.7+Math.random()*.6),s:(o.s??5)*(.7+Math.random()*.6),rot:Math.random()*6,vr:(Math.random()-.5)*(o.vr??6),type:o.type??'spark',c:o.c??'#ffffff',add:o.add??true})}
 }
-function stepParts(dt){if(!G||!G.parts)return;for(const p of G.parts){p.t+=dt;const k=Math.exp(-p.drag*dt);p.vx*=k;p.vy=p.vy*k+p.g*dt;p.x+=p.vx*dt;p.y+=p.vy*dt;p.rot+=p.vr*dt}G.parts=G.parts.filter(p=>p.t<p.life)}
-function drawParts(sx,sy,add){if(!G||!G.parts)return;const transform=G.parts.length?ctx.getTransform():undefined;if(add)ctx.globalCompositeOperation='lighter';
+function stepParts(dt){const parts=G?.parts;if(!parts?.length)return;let live=0;for(const p of parts){p.t+=dt;if(!(p.t<p.life))continue;const k=Math.exp(-p.drag*dt);p.vx*=k;p.vy=p.vy*k+p.g*dt;p.x+=p.vx*dt;p.y+=p.vy*dt;p.rot+=p.vr*dt;parts[live++]=p}parts.length=live}
+function drawParts(sx,sy,add){if(!G?.parts?.length)return;const transform=ctx.getTransform();if(add)ctx.globalCompositeOperation='lighter';
   for(const p of G.parts){if(p.add!==add)continue;const e=p.t/p.life,a=e<.15?e/.15:1-(e-.15)/.85;glyph(p.type,sx(p.x),sy(p.y),p.s*U,p.rot,a,p.c,transform)}
   ctx.globalCompositeOperation='source-over'}
 // crescent blade (pointing +x), filled with a soft edge
@@ -4667,18 +4668,25 @@ const MAPS={forest:Object.assign({label:'숲',variants:['evening','night'],dir:'
 for(const[k,bg]of[['heaven','#cfd8e6'],['battlefield','#1a1410'],['hell','#1a0604']])if(MAPDATA&&MAPDATA[k])MAPS[k]=Object.assign({dir:'assets/maps/'+k,bg},MAPDATA[k]);
 const DIFF_MAP={easy:'heaven',normal:'forest',hard:'battlefield',hell:'hell'};
 const TS=1024,CG=256;let FOREST=MAPS.forest,TC=1,TR=1,MAPI={tiles:{},props:{},ready:false},COLGRID=new Map();
-function loadMap(key){const M=MAPS[key]||MAPS.forest;FOREST=M;TC=Math.ceil(M.size[0]/TS);TR=Math.ceil(M.size[1]/TS);
-  if(!M.mapi){const mi=M.mapi={tiles:{},props:{},ready:false};let need=0,got=0;const done=()=>{if(++got===need)mi.ready=true};
-    const ld=(src)=>{need++;const im=new Image();im.onload=done;im.onerror=()=>{need--;if(got===need)mi.ready=true};im.src=src;return im};
-    for(const w of M.variants){mi.tiles[w]=[];for(let r=0;r<TR;r++)for(let c=0;c<TC;c++)mi.tiles[w][r*TC+c]=ld(`${M.dir}/tiles/${w}_${c}_${r}.webp`)}
-    for(const n of new Set(M.objects.map(o=>o.sprite))){mi.props[n]={};for(const w of M.variants)mi.props[n][w]=ld(`${M.dir}/props/${n}_${w}.webp`)}
+function loadMap(key,titleOnly=false){const M=MAPS[key]||MAPS.forest;FOREST=M;TC=Math.ceil(M.size[0]/TS);TR=Math.ceil(M.size[1]/TS);
+  if(!M.mapi){const mi=M.mapi={tiles:{},props:{},ready:false,pending:0,propsStarted:false,titleReady:false};
+    for(const w of M.variants)mi.tiles[w]=[];
     const cg=M.colgrid=new Map();for(const o of M.objects){if(!o.c)continue;const[cx,cy,rx,ry]=o.c;for(let gx=Math.floor((cx-rx)/CG);gx<=Math.floor((cx+rx)/CG);gx++)for(let gy=Math.floor((cy-ry)/CG);gy<=Math.floor((cy+ry)/CG);gy++){const k=gx+','+gy;(cg.get(k)||cg.set(k,[]).get(k)).push(o.c)}}}
+  const mi=M.mapi;if(mi.ready)mi.titleReady=true;const done=()=>{mi.ready=--mi.pending===0};
+  const ld=src=>{mi.pending++;mi.ready=false;const im=new Image();im.onload=im.onerror=done;im.src=src;return im};
+  // 첫 화면의 카메라 범위만 우선 받고, 소품과 나머지 타일은 게임 시작 때 받는다.
+  const [mx,my]=M.spawn,rx=500+Math.min(innerWidth,innerHeight*1.2)/.62,ry=900+innerHeight/.62/2;
+  for(const w of M.variants)for(let r=0;r<TR;r++)for(let c=0;c<TC;c++){
+    if(titleOnly&&(c*TS>mx+rx||(c+1)*TS<mx-rx||r*TS>my+ry||(r+1)*TS<my-ry))continue;
+    const row=mi.tiles[w],i=r*TC+c;if(!row[i])row[i]=ld(`${M.dir}/tiles/${w}_${c}_${r}.webp`);
+  }
+  if(!titleOnly&&!mi.propsStarted){mi.propsStarted=true;for(const n of new Set(M.objects.map(o=>o.sprite))){mi.props[n]={};for(const w of M.variants)mi.props[n][w]=ld(`${M.dir}/props/${n}_${w}.webp`)}}
   if(!M.flowBlk){const FW=Math.ceil(M.size[0]/FG),FH=Math.ceil(M.size[1]/FG),blk=new Uint8Array(FW*FH);
     for(const o of M.objects){if(!o.c)continue;const[cx,cy,rx,ry]=o.c;for(let gx=Math.max(0,Math.floor((cx-rx-20)/FG));gx<=Math.min(FW-1,Math.floor((cx+rx+20)/FG));gx++)for(let gy=Math.max(0,Math.floor((cy-ry-14)/FG));gy<=Math.min(FH-1,Math.floor((cy+ry+14)/FG));gy++){const px=(gx+.5)*FG,py=(gy+.5)*FG,ex=(px-cx)/(rx+18),ey=(py-cy)/(ry+11);if(ex*ex+ey*ey<1)blk[gx+gy*FW]=1}}
     M.flowBlk={FW,FH,blk}}
   FLOW=Object.assign({},M.flowBlk,{dist:new Int32Array(M.flowBlk.FW*M.flowBlk.FH).fill(1e9),q:new Int32Array(M.flowBlk.FW*M.flowBlk.FH),t:0});
   MAPI=M.mapi;COLGRID=M.colgrid}
-loadMap(DIFF_MAP[DIFF]||'forest');
+loadMap(DIFF_MAP[DIFF]||'forest',true);
 function mapClamp(o,pad=0){const b=FOREST.border+pad;o.x=Math.max(b,Math.min(FOREST.size[0]-b,o.x));o.y=Math.max(b,Math.min(FOREST.size[1]-b,o.y))}
 // v1.6.8.1 몬스터도 지형지물 통과 불가 — 밀어내고, 막히면 장애물 둘레를 따라 돌아서 옴
 function foeCollide(f,dt){if(f.sideT>0)f.sideT-=dt;else{f.side=0;f.ctime=0}if(FLOW&&!flowNear(f.x,f.y))return;const arr=COLGRID&&COLGRID.get(Math.floor(f.x/CG)+','+Math.floor(f.y/CG));if(!arr)return;const r=f.r+2;
@@ -4700,7 +4708,7 @@ function drawMapGround(cx,cy){
   if(LOWFX){ts(FOREST.variants[k<.5?0:1],1);return}
   if(k<1)ts(FOREST.variants[0],1);ts(FOREST.variants[1],k);
 }
-function visibleProps(cx,cy){const vw=W/U/2+200,vh=H/U/2;const out=[];for(const o of FOREST.objects){if(Math.abs(o.x-cx)>vw+o.w/2)continue;if(o.y<cy-vh-40||o.y-o.h>cy+vh+40)continue;out.push(o)}return out}
+/* 화면 흔들림을 반영한 카메라에서, 그림 경계가 완전히 밖인 소품을 정렬 전에 뺀다. */function visibleProps(cx,cy){const vw=(W/2+2)/U,vh=(H/2+2)/U;const out=[];for(const o of FOREST.objects){if(Math.abs(o.x-cx)>vw+o.w/2)continue;if(o.y<cy-vh||o.y-o.h>cy+vh)continue;out.push(o)}return out}
 function drawProp(o,sx,sy,heroSX,heroSY){
   const k=nightK(),P=MAPI.props[o.sprite];if(!P)return;const x=sx(o.x),y=sy(o.y),w=o.w*U,h=o.h*U;
   // see-through when the hero stands behind a tall object
@@ -4719,12 +4727,30 @@ function checkPlace(){if(!G)return;for(const p of FOREST.places){const inn=Math.
 /* ---------- render ---------- */
 const MOBILE=(()=>{try{return matchMedia('(pointer:coarse)').matches||/Android|iPhone|iPad|Mobile/i.test(navigator.userAgent)}catch(e){return false}})();let QUAL='auto',RS=1,LOWFX=false;try{QUAL=localStorage.getItem('bb_qual')||'auto'}catch(e){}LOWFX=QUAL==='low';
 if(MOBILE){const k=document.querySelector('.keys');if(k){k.textContent='화면을 누르고 끌어서 이동 · 공격은 박자에 맞춰 자동 · 필살기는 오른쪽 아래 버튼';k.hidden=true}const th=document.querySelector('#titleOv .hint');if(th)th.textContent='화면을 누르고 끌어서 이동 · 공격은 박자에 맞춰 자동 · 필살기는 오른쪽 아래 버튼 · 오른쪽 위 버튼으로 일시정지. 레벨 업 카드는 눌러서 고릅니다.';const lh=document.querySelector('#lvOv .hint');if(lh)lh.innerHTML='<span style="color:var(--ember)">전용</span>은 이 캐릭터만 쓸 수 있는 무기입니다. 무기는 6개까지. 조합표의 재료 레벨을 모두 채우면 <span style="color:#e9c46a">전설</span> 카드가 나오고, 재료 무기는 전설 하나로 합쳐집니다.'}
-const PERF={ema:16,acc:0,lowT:0};
+let edgeShade=null;const PERF={ema:16,acc:0,lowT:0};
 function qualRS(){return QUAL==='low'?.6:QUAL==='high'?1:RS}
 function setQual(q){QUAL=q;LOWFX=q==='low';try{localStorage.setItem('bb_qual',q)}catch(e){}if(q==='auto')RS=1;resize();const b=document.getElementById('qualBtn');if(b)b.textContent='그래픽: '+{auto:'자동',high:'선명하게',low:'가볍게'}[q];if(typeof buildSettings==='function')buildSettings()}
-function perfTick(ms){PERF.ema+=(ms-PERF.ema)*(MOBILE?.12:.05);PERF.acc+=ms;if(PERF.acc<(MOBILE?600:1500))return;PERF.acc=0;if(QUAL!=='auto')return;const hi=MOBILE?21:24;
-  if(PERF.ema>hi&&!LOWFX&&MOBILE){LOWFX=true}else if(PERF.ema>hi&&RS>(MOBILE?.86:.56)){/* 1.13.16.19 폰은 캐릭터가 흐려지지 않게 해상도는 85%까지만 낮춤(먼저 효과를 가볍게) */RS=Math.max(MOBILE?.85:.55,RS-(MOBILE?.15:.12));resize()}else if(PERF.ema>hi&&!LOWFX){LOWFX=true}else if(PERF.ema<12&&LOWFX&&RS>=.55){LOWFX=false}else if(PERF.ema<14){PERF.lowT++;if(PERF.lowT>=3&&RS<1){RS=Math.min(1,RS+.1);PERF.lowT=0;resize()}}else PERF.lowT=0}
-function resize(){const r=stageEl.getBoundingClientRect();dpr=Math.min(MOBILE?2:1.5,window.devicePixelRatio||1)*qualRS();/* 1.13.16.18 폰 캐릭터 선명하게: 캐릭터 그림 원본(키 약 240px)이 그대로 보이도록 폰 배율 상한 2 — 버벅이면 「그래픽: 자동」이 알아서 낮춤 */W=r.width;H=r.height;{/* 1.8.6.9 화면 픽셀 수 상한(모바일 0.9M·PC 2.4M) */const MP=MOBILE?1.9e6:2.4e6,px=W*H*dpr*dpr;if(px>MP)dpr*=Math.sqrt(MP/px)}cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);U=Math.max(.62,Math.min(1.25,Math.min(W,H*1.2)/680))}
+function perfTick(ms){
+  PERF.ema+=(ms-PERF.ema)*(MOBILE?.12:.05);PERF.acc+=ms;if(PERF.acc<(MOBILE?600:1500))return;PERF.acc=0;if(QUAL!=='auto')return;
+  const hi=MOBILE?21:24;
+  if(PERF.ema>hi){
+    PERF.lowT=0;
+    if(!LOWFX&&MOBILE){LOWFX=true;return}
+    if(RS>(MOBILE?.86:.56)){RS=Math.max(MOBILE?.85:.55,RS-(MOBILE?.15:.12));resize();return}
+    LOWFX=true;return;
+  }
+  // 모바일은 60fps로 제한하므로 16.7ms에서도 안정 구간을 셀 수 있어야 한다.
+  if(MOBILE){
+    if(PERF.ema>18||(!LOWFX&&RS===1)){PERF.lowT=0;return}
+    if(++PERF.lowT<5)return;PERF.lowT=0;
+    if(RS<1){RS=1;resize()}else LOWFX=false;
+    return;
+  }
+  if(PERF.ema<12&&LOWFX&&RS>=.55){LOWFX=false}
+  else if(PERF.ema<14){PERF.lowT++;if(PERF.lowT>=3&&RS<1){RS=Math.min(1,RS+.1);PERF.lowT=0;resize()}}
+  else PERF.lowT=0;
+}
+function resize(){edgeShade=null;const r=stageEl.getBoundingClientRect();dpr=Math.min(MOBILE?2:1.5,window.devicePixelRatio||1)*qualRS();/* 1.13.16.18 폰 캐릭터 선명하게: 캐릭터 그림 원본(키 약 240px)이 그대로 보이도록 폰 배율 상한 2 — 버벅이면 「그래픽: 자동」이 알아서 낮춤 */W=r.width;H=r.height;{/* 1.8.6.9 화면 픽셀 수 상한(모바일 0.9M·PC 2.4M) */const MP=MOBILE?1.9e6:2.4e6,px=W*H*dpr*dpr;if(px>MP)dpr*=Math.sqrt(MP/px)}cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);U=Math.max(.62,Math.min(1.25,Math.min(W,H*1.2)/680))}
 new ResizeObserver(resize).observe(stageEl);resize();
 function hash(a,b){let n=Math.sin(a*127.1+b*311.7)*43758.5453;return n-Math.floor(n)}
 function drawGround(cx,cy,pn){
@@ -5064,7 +5090,7 @@ let FR_LAST=0;function frame(pn){
   let cx=G.x,cy=G.y-30;{const hw=W/U/2,hh=H/U/2;cx=Math.max(hw,Math.min(FOREST.size[0]-hw,cx));cy=Math.max(hh,Math.min(FOREST.size[1]-hh,cy))}
   let ox=0,oy=0;if(G.shake>0){ox=(Math.random()-.5)*9*G.shake;oy=(Math.random()-.5)*7*G.shake;G.shake=Math.max(0,G.shake-rdt*3)}
   ctx.save();ctx.translate(ox,oy);
-  if(MAPI.ready)drawMapGround(cx,cy);else drawGround(cx,cy,pn);
+  if(MAPI.ready||MAPI.titleReady)drawMapGround(cx,cy);else drawGround(cx,cy,pn);
   const sx=x=>(x-cx)*U+W/2,sy=y=>(y-cy)*U+H/2;
   // ---- ground layer
   const pa=Math.max(0,1-(pn-(G.pulse||0))/260);if(pa>0)thinRing(sx(G.x),sy(G.y),(26+20*(1-pa))*U,1.2*U,hc(),.5*pa,.42);
@@ -5115,7 +5141,7 @@ let FR_LAST=0;function frame(pn){
   // ---- y-sorted world
   const list=[];
   for(const f of G.foes){const x=sx(f.x),y=sy(f.y);if(x<-100||x>W+100||y<-30||y>H+220)continue;list.push([f.y,0,f])}
-  list.push([G.y,1,null]);if(MAPI.ready)for(const o of visibleProps(cx,cy)){if(o.kind==='water'){drawProp(o,sx,sy,-1e9,-1e9);continue}list.push([o.y,2,o])} // 연못·용암 호수는 바닥처럼 맨 아래
+  list.push([G.y,1,null]);if(MAPI.ready)for(const o of visibleProps(cx-ox/U,cy-oy/U)){if(o.kind==='water'){drawProp(o,sx,sy,-1e9,-1e9);continue}list.push([o.y,2,o])} // 연못·용암 호수는 바닥처럼 맨 아래
   for(const e of G.ents)if(e.k==='hfire')e.drw(sx,sy,pn);else if(e.k==='drum'||e.drumLayers)e.drw(sx,sy,pn,true);
   for(const e of G.ents)if(e.k==='phantom'||e.k==='duck'||e.k==='sunf'||e.k==='turret')list.push([e.y,3,e]);else if(e.ys)list.push([e.y,4,e]);/* 1.8.9.0 땅에 꽂힌 물체 등: 캐릭터·몹과 앞뒤 정렬 */
   list.sort((a,b)=>a[0]-b[0]);const hSX=sx(G.x),hSY=sy(G.y);
@@ -5186,11 +5212,11 @@ let FR_LAST=0;function frame(pn){
   ctx.imageSmoothingEnabled=true;
   drawParts(sx,sy,false);drawParts(sx,sy,true);drawHeroFx(sx,sy,pn);
   ctx.textAlign='center';ctx.textBaseline='middle';
-  G.nums=G.nums.filter(n=>{const age=pn-n.t0;if(age>520)return false;const e=age/520;ctx.globalAlpha=1-e*e;ctx.font=`600 ${Math.round(10*U+2)}px ${FN}`;ctx.fillStyle='#f4efe4';ctx.fillText(n.v,sx(n.x),sy(n.y)-e*18*U);ctx.globalAlpha=1;return true});
+  const nums=G.nums;let shown=0;if(nums.length){ctx.font=`600 ${Math.round(10*U+2)}px ${FN}`;ctx.fillStyle='#f4efe4';for(const n of nums){const age=pn-n.t0;if(age>520)continue;nums[shown++]=n;const e=age/520;ctx.globalAlpha=1-e*e;ctx.fillText(n.v,sx(n.x),sy(n.y)-e*18*U)}nums.length=shown;ctx.globalAlpha=1}
   /* 1.14.6.0 켜진 경우에만 추가 판정 그리기 */if(window.__hb===1)drawHitboxes(sx,sy);
   ctx.restore();
   if(MAPI.ready)drawLights(sx,sy,pn);
-  const vg=ctx.createRadialGradient(W/2,H/2,Math.min(W,H)*.35,W/2,H/2,Math.max(W,H)*.7);vg.addColorStop(0,'rgba(16,22,29,0)');vg.addColorStop(1,'rgba(16,22,29,.55)');ctx.fillStyle=vg;ctx.fillRect(0,0,W,H);
+  if(!edgeShade){edgeShade=ctx.createRadialGradient(W/2,H/2,Math.min(W,H)*.35,W/2,H/2,Math.max(W,H)*.7);edgeShade.addColorStop(0,'rgba(16,22,29,0)');edgeShade.addColorStop(1,'rgba(16,22,29,.55)')}ctx.fillStyle=edgeShade;ctx.fillRect(0,0,W,H);
   for(const e of G.ents)if(e.ov)e.drw(sx,sy,pn);
   if(joy.on){ctx.strokeStyle='rgba(239,232,218,.35)';ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(joy.sx,joy.sy,40,0,7);ctx.stroke();const dx=joy.x-joy.sx,dy=joy.y-joy.sy,d=Math.min(40,Math.hypot(dx,dy)),a=Math.atan2(dy,dx);ctx.fillStyle='rgba(239,232,218,.45)';ctx.beginPath();ctx.arc(joy.sx+Math.cos(a)*d,joy.sy+Math.sin(a)*d,15,0,7);ctx.fill()}
   for(const f of G.foes){if(!f.zone||f.dead||f.st==='guardWind')continue;const X=sx(f.x),Y=sy(f.y);if(X>-20&&X<W+20&&Y>-20&&Y<H+20)continue;const d=Math.hypot(f.x-G.x,f.y-G.y);if(d>1600)continue;let cx=W/2,cy=H/2,a=Math.atan2(Y-cy,X-cx),m=28*U,ex=Math.max(m,Math.min(W-m,cx+Math.cos(a)*W)),ey=Math.max(m+40*U,Math.min(H-m,cy+Math.sin(a)*H));{/* 1.14.4.3 필드 보스 화살표가 왼쪽 위 이름·체력·스킬 칸, 시계, 일시정지, 필살기 버튼 위에 겹치지 않게 그 아래(위)로 밀어냄 */const p2=hudAvoid(ex,ey,20*U);ex=p2[0];ey=p2[1]}ctx.fillStyle='rgba(30,20,8,.6)';ctx.beginPath();ctx.arc(ex,ey,14*U,0,7);ctx.fill();ctx.strokeStyle='#ffd25a';ctx.lineWidth=1.5*U;ctx.stroke();ctx.font=`${Math.round(13*U)}px sans-serif`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(f.rew.ic,ex,ey+1);ctx.textBaseline='alphabetic';ctx.save();ctx.translate(ex,ey);ctx.rotate(a);ctx.fillStyle='#ffd25a';ctx.beginPath();ctx.moveTo(19*U,0);ctx.lineTo(13*U,-4*U);ctx.lineTo(13*U,4*U);ctx.fill();ctx.restore()} /* 1.14.6.0 수호자 공격 화살표 중복 방지 */
@@ -5350,7 +5376,7 @@ function rubySpecial(m,ov){G.iT=Math.max(G.iT,2.6);const R=250*areaMul(),T0=.5,D
   heroAttack('talk')}
 
 
-(function(){const b=$('pzBtn');if(!b)return;const go=e=>{e.preventDefault();e.stopPropagation();if(G&&!G.over&&!G.paused&&!G.choosing)pause()};b.addEventListener('pointerdown',go);b.addEventListener('click',e=>e.preventDefault())})();
+(function(){const b=$('pzBtn');if(!b)return;const go=e=>{e.preventDefault();e.stopPropagation();if(G&&!G.over&&!G.paused&&!G.choosing)pause()};b.addEventListener('pointerdown',go);b.addEventListener('click',e=>{if(e.detail===0)go(e);else e.preventDefault()})})();
 /* ===================== v51 : 기록·랭킹·접속인원 (샘플) =====================
    FB_URL 이 비어 있으면 이 기기에만 저장(로컬 모드).
    Firebase Realtime Database 주소를 넣으면 온라인 랭킹·접속인원·누적인원이 켜짐(REST, SDK 불필요).
@@ -5839,7 +5865,7 @@ function showGal(){let d=$('galDlg');if(!d){d=document.createElement('dialog');d
 (function(){const row=document.querySelector('.topbtns');if(!row)return;const gb=document.createElement('button');gb.type='button';gb.id='galBtn';gb.className='notesbtn';gb.textContent='🖼️ 일러스트';gb.onclick=()=>showGal();row.append(gb)})();
 (function(){const row=document.querySelector('.topbtns');if(!row)return;const ab=document.createElement('button');ab.type='button';ab.id='achBtn';ab.className='notesbtn';ab.textContent='🏆 업적';ab.onclick=()=>showAch();row.append(ab);achBadge();setInterval(()=>{const o=$('titleOv');if(!document.hidden&&o&&!o.hidden)achBadge()},4000)/* 게임 중엔 안 돎 */})();
 /* 1.13.16.5 새 버전 알림: GitHub 페이지에서만, 작은 version.json을 3분마다(그리고 탭으로 돌아올 때) 확인해 이 화면보다 새 빌드가 있으면 처음 화면에 「새로고침」 띠를 띄움. 게임 중엔 안 띄우고 처음 화면으로 돌아오면 보여 줌 */
-const BUILD='20261124153551';
+const BUILD='20261124201406';
 /* 1.13.16.15 앱(PWA) · 1.13.16.16 버튼 항상 보이게: GitHub 주소면 서비스워커 등록 + 「📲 앱으로 설치」(크롬은 설치 창, 없으면 메뉴 안내, 아이폰은 Safari 공유 → 홈 화면에 추가 안내).
    카카오톡·네이버 등 앱 안 브라우저면 크롬(외부 브라우저)으로 열어 줌. Claude 페이지 등 다른 주소면 GitHub 주소를 새 창으로 열어 줌. 이미 앱으로 열었으면 버튼 없음 */
 (function(){const GH='https://vnfms3346-alt.github.io/beatblade/';const onGH=/github\.io$/.test(location.hostname);
